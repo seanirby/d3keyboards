@@ -10,100 +10,99 @@ var keyboard = (function(){
   function buildAppleKeyboard(){
     var keyboard = [];
 
-    var k = 1,                      //Width of character keys EXCEPT space
-        m = 1/6,                    //Width of margin
-        dlt = (1.5*k) + (0.5*m),    //Width of delete key AND tab key
-        w = (13*k) + (13*m) + dlt,  //Length of keyboard
-        caps = (w - (11*k) - (12*m)) / 2,
-        shift = caps + (0.5*k) + (0.5*m),
-        cmd = shift - k - m,
-        space = (5*k) + (4*m),
-        kx = (w - (13*m)) / 14,     //Width of functions keys
-        hx = 0.5 * (k+m),           //Height of function keys
-        kb = 2 * hx;                //Height of bottom row keys
+    var widthCharKey      = 1,
+        widthMargin       = 1/9,
+        widthDeleteKey    = 1.5 * widthCharKey + 0.5 * widthMargin,
+        widthKeyboard     = 13 * widthCharKey + 13 * widthMargin + widthDeleteKey,
+        widthCapsLockKey  = 0.5 * (widthKeyboard - 11 * widthCharKey - 12 * widthMargin),
+        widthShiftKey     = widthCapsLockKey + 0.5 * widthCharKey + 0.5 * widthMargin,
+        widthCommandKey   = widthShiftKey - widthCharKey - widthMargin,
+        widthSpacebarKey  = 5 * widthCharKey + 4 * widthMargin,
+        widthEscapeKey    = (1/14) * (widthKeyboard - 13 * widthMargin),
+        heightFKey        = 0.5 * (widthCharKey + widthMargin);
 
     // Temp variables for building keyboard
-    var row =[],
-        names = [],
-        widths = [],
-        y,  // y position of row
-        acc = 0;
+    var tempRow =[],                // Keyboard row
+        tempNames = [],             // Array of key names
+        tempWidths = [],            // Array of key widths (corresponding to variable above)
+        tempY,                      // Y position of tempRow
+        tempAcc;                    // Length accumulator for positioning keys
 
     // Build first row (function keys)
-    row =[];
-    names = ["esc", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", ""];
-    y = 0;
-    names.forEach(function(elem, i){
-      row.push( new Key(elem, i * (kx+m), y, kx, hx));
+    tempRow =[];
+    tempNames = ["esc", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", ""];
+    tempY = 0;
+    tempNames.forEach(function(elem, i){
+      tempRow.push( new Key(elem, i * (widthEscapeKey + widthMargin), tempY, widthEscapeKey, heightFKey));
     })
-    keyboard.push(row)
+    keyboard.push(tempRow)
 
     // Build second row (numbers)
-    row = [];
-    names = ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "delete"];
-    y = hx + m;
-    names.forEach(function(elem, i){
-      var key = new Key(elem, i * (k+m), y, k, k);
-      if(elem == "delete") key.width = dlt;
-      row.push(key);
+    tempRow = [];
+    tempNames = ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "delete"];
+    tempY += heightFKey + widthMargin;
+    tempNames.forEach(function(elem, i){
+      var key = new Key(elem, i * (widthCharKey + widthMargin), tempY, widthCharKey, widthCharKey);
+      if(elem == "delete") key.width = widthDeleteKey;
+      tempRow.push(key);
     })
-    keyboard.push(row)
+    keyboard.push(tempRow)
 
     // Build third row (QWERTY)
-    row = [];
-    names = ["tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "\\"];
-    y += k + m;
-    names.forEach(function(elem, i){
-      var key = new Key(elem, dlt + ((i-1)*k) + (i*m), y, k, k);
+    tempRow = [];
+    tempNames = ["tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "\\"];
+    tempY += widthCharKey + widthMargin;
+    tempNames.forEach(function(elem, i){
+      var key = new Key(elem, widthDeleteKey + ((i-1) * widthCharKey) + (i * widthMargin), tempY, widthCharKey, widthCharKey);
       if(elem == "tab"){
-        key.width = dlt;
+        key.width = widthDeleteKey;
         key.x = 0;
       }
-      row.push(key);
+      tempRow.push(key);
     })
-    keyboard.push(row)
+    keyboard.push(tempRow)
 
     // Build fourth row (ASDF)
-    row = [];
-    names = ["caps-lock", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'", "enter"];
-    y += k + m;
-    names.forEach(function(elem, i){
-      var key = new Key(elem, caps + ((i-1)*k) + (i*m), y, k, k);
+    tempRow = [];
+    tempNames = ["caps-lock", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'", "enter"];
+    tempY += widthCharKey + widthMargin;
+    tempNames.forEach(function(elem, i){
+      var key = new Key(elem, widthCapsLockKey + ((i-1) * widthCharKey) + (i * widthMargin), tempY, widthCharKey, widthCharKey);
       if(elem == "caps-lock") key.x = 0;
-      if(elem == "caps-lock" || elem == "enter") key.width = caps;
-      row.push(key);
+      if(elem == "caps-lock" || elem == "enter") key.width = widthCapsLockKey;
+      tempRow.push(key);
     })
-    keyboard.push(row);
+    keyboard.push(tempRow);
 
     // Build fifth row (ZXCV)
-    row = [];
-    names = ["shift", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", "shift"];
-    y += k + m;
-    names.forEach(function(elem, i){
-      var key = new Key(elem, shift + ((i-1)*k) + (i*m), y, k, k);
-      if(elem == "shift") key.width = shift;
+    tempRow = [];
+    tempNames = ["shift", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", "shift"];
+    tempY += widthCharKey + widthMargin;
+    tempNames.forEach(function(elem, i){
+      var key = new Key(elem, widthShiftKey + ((i-1) * widthCharKey) + (i * widthMargin), tempY, widthCharKey, widthCharKey);
+      if(elem == "shift") key.width = widthShiftKey;
       if(i == 0) key.x = 0;
-      row.push(key);
+      tempRow.push(key);
     })
-    keyboard.push(row);
+    keyboard.push(tempRow);
 
     // Build sixth row
-    row = [];
-    names = ["fn", "ctrl", "alt", "super", "spacebar", "super", "alt"];
-    widths = [k, k, k, cmd, space, cmd, k];
-    y += k + m;
-    acc = 0;
-    names.forEach(function(elem, i){
-      var key = new Key(elem, acc, y, widths[i], 2*hx);
-      acc += widths[i] + m;
-      row.push(key)
+    tempRow = [];
+    tempNames = ["fn", "ctrl", "alt", "super", "spacebar", "super", "alt"];
+    widths = [widthCharKey, widthCharKey, widthCharKey, widthCommandKey, widthSpacebarKey, widthCommandKey, widthCharKey];
+    tempY += widthCharKey + widthMargin;
+    tempAcc = 0;
+    tempNames.forEach(function(elem, i){
+      var key = new Key(elem, tempAcc, tempY, widths[i], 2 * heightFKey);
+      tempAcc += widths[i] + widthMargin;
+      tempRow.push(key)
     })
     // Build arrow keys
-    row.push( new Key("left",   w - (3*k) - (2*m), y + hx,  k, hx));
-    row.push( new Key("up",     w - (2*k) - (1*m),      y,  k, hx));
-    row.push( new Key("down",   w - (2*k) - (1*m), y + hx,  k, hx));
-    row.push( new Key("right",              w - k, y + hx,  k, hx));
-    keyboard.push(row)
+    tempRow.push( new Key("left",   widthKeyboard - (3 * widthCharKey) - (2 * widthMargin), tempY + heightFKey,  widthCharKey, heightFKey));
+    tempRow.push( new Key("up",     widthKeyboard - (2 * widthCharKey) - (1 * widthMargin),              tempY,  widthCharKey, heightFKey));
+    tempRow.push( new Key("down",   widthKeyboard - (2 * widthCharKey) - (1 * widthMargin), tempY + heightFKey,  widthCharKey, heightFKey));
+    tempRow.push( new Key("right",  widthKeyboard - widthCharKey, tempY + heightFKey,  widthCharKey, heightFKey));
+    keyboard.push(tempRow)
 
     return keyboard;
   }
