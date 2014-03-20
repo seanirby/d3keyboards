@@ -46,5 +46,4 @@ plotter = (function(){
       }
 })();
 
-console.log(keyboard.build("apple"))
 plotter.init(keyboard.build("apple"));
