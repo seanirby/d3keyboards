@@ -10,18 +10,18 @@ var keyboard = (function(){
   function buildAppleKeyboard(){
     var keyboard = [];
 
-    var widthCharKey      = 1,
-        widthMargin       = 1/9,
-        widthDeleteKey    = 1.5 * widthCharKey + 0.5 * widthMargin,
-        widthKeyboard     = 13 * widthCharKey + 13 * widthMargin + widthDeleteKey,
-        widthCapsLockKey  = 0.5 * (widthKeyboard - 11 * widthCharKey - 12 * widthMargin),
-        widthShiftKey     = widthCapsLockKey + 0.5 * widthCharKey + 0.5 * widthMargin,
-        widthCommandKey   = widthShiftKey - widthCharKey - widthMargin,
-        widthSpacebarKey  = 5 * widthCharKey + 4 * widthMargin,
-        widthEscapeKey    = (1/14) * (widthKeyboard - 13 * widthMargin),
-        heightFKey        = 0.5 * (widthCharKey + widthMargin);
+    var widthCharKey        = 1,    // Exluding spacebar.  Value also equals the height for all keys except top row keys and bottom row keys.
+        widthMargin         = 1/8,  // Just guessing on this one. Values from 1/6 to 1/8 seem reasonable
+        widthDeleteKey      = 1.5 * widthCharKey + 0.5 * widthMargin,
+        widthKeyboard       = 13 * widthCharKey + 13 * widthMargin + widthDeleteKey,
+        widthCapsLockKey    = 0.5 * (widthKeyboard - 11 * widthCharKey - 12 * widthMargin), // Value also equals width of enter key
+        widthShiftKey       = widthCapsLockKey + 0.5 * widthCharKey + 0.5 * widthMargin,
+        widthCommandKey     = widthShiftKey - widthCharKey - widthMargin,
+        widthSpacebarKey    = 5 * widthCharKey + 4 * widthMargin,
+        widthTopRowKey      = (1/14) * (widthKeyboard - 13 * widthMargin),
+        heightBottomRowKey  = widthCharKey + widthMargin,
+        heightTopRowKey     = 0.5 * heightBottomRowKey;
 
-    // Temp variables for building keyboard
     var tempRow =[],                // Keyboard row
         tempNames = [],             // Array of key names
         tempWidths = [],            // Array of key widths (corresponding to variable above)
@@ -33,14 +33,14 @@ var keyboard = (function(){
     tempNames = ["esc", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", ""];
     tempY = 0;
     tempNames.forEach(function(elem, i){
-      tempRow.push( new Key(elem, i * (widthEscapeKey + widthMargin), tempY, widthEscapeKey, heightFKey));
+      tempRow.push( new Key(elem, i * (widthTopRowKey + widthMargin), tempY, widthTopRowKey, heightTopRowKey));
     })
     keyboard.push(tempRow)
 
     // Build second row (numbers)
     tempRow = [];
     tempNames = ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "delete"];
-    tempY += heightFKey + widthMargin;
+    tempY += heightTopRowKey + widthMargin;
     tempNames.forEach(function(elem, i){
       var key = new Key(elem, i * (widthCharKey + widthMargin), tempY, widthCharKey, widthCharKey);
       if(elem == "delete") key.width = widthDeleteKey;
@@ -93,15 +93,15 @@ var keyboard = (function(){
     tempY += widthCharKey + widthMargin;
     tempAcc = 0;
     tempNames.forEach(function(elem, i){
-      var key = new Key(elem, tempAcc, tempY, widths[i], 2 * heightFKey);
+      var key = new Key(elem, tempAcc, tempY, widths[i], heightBottomRowKey);
       tempAcc += widths[i] + widthMargin;
       tempRow.push(key)
     })
     // Build arrow keys
-    tempRow.push( new Key("left",   widthKeyboard - (3 * widthCharKey) - (2 * widthMargin), tempY + heightFKey,  widthCharKey, heightFKey));
-    tempRow.push( new Key("up",     widthKeyboard - (2 * widthCharKey) - (1 * widthMargin),              tempY,  widthCharKey, heightFKey));
-    tempRow.push( new Key("down",   widthKeyboard - (2 * widthCharKey) - (1 * widthMargin), tempY + heightFKey,  widthCharKey, heightFKey));
-    tempRow.push( new Key("right",  widthKeyboard - widthCharKey, tempY + heightFKey,  widthCharKey, heightFKey));
+    tempRow.push( new Key("left",   widthKeyboard - (3 * widthCharKey) - (2 * widthMargin), tempY + heightTopRowKey,  widthCharKey, heightTopRowKey));
+    tempRow.push( new Key("up",     widthKeyboard - (2 * widthCharKey) - (1 * widthMargin),              tempY,  widthCharKey, heightTopRowKey));
+    tempRow.push( new Key("down",   widthKeyboard - (2 * widthCharKey) - (1 * widthMargin), tempY + heightTopRowKey,  widthCharKey, heightTopRowKey));
+    tempRow.push( new Key("right",  widthKeyboard - widthCharKey, tempY + heightTopRowKey,  widthCharKey, heightTopRowKey));
     keyboard.push(tempRow)
 
     return keyboard;
