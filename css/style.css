@@ -1,4 +1,12 @@
-#canvas{
+#keyboard-container{
   width: 100%;
   height: 100%;
+}
+
+.key {
+  position: absolute;
+}
+
+.key:hover{
+  background-color: red;
 }

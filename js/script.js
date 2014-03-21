@@ -1,49 +1,25 @@
-plotter = (function(){
-  var plotWidth = 1500,
-      plotHeight = 1500,
-      paddingX = 20,
-      paddingY = 20,
-      newData = [],
-      previousData = [],
-      xScale,
-      yScale,
-      canvas = d3.select("#canvas")
-                      .append("svg:svg")
-                      .attr({
-                          width: plotWidth+(paddingX*2),
-                          height: plotHeight+(paddingY*2)
-                      });
-      return {
-        init: function(keyboard){
-          xScale = d3.scale.linear().domain([0, 1]).range([0, 65]);
-          yScale = d3.scale.linear().domain([0, 1]).range([0, 65]);
+htmlKeyboard = (function(JSHelpers){
+  var scale = 60; // length of 1 key in pixels
 
-          var rows = canvas.selectAll("g.row-key")
-            .data(keyboard)
-            .enter().append("svg:g")
+  return {
+    init: function(keyboard){
+      var container = document.getElementById("keyboard-container");
+      var key;
+      keyboard.forEach(function(elem, i){
+        elem.forEach(function(elem, j){
+          key = JSHelpers.createNode("<button class='key'></button>");
+          container.appendChild(key);
+          key.style.width = scale * keyboard[i][j].width+"px";
+          key.style.height = scale * keyboard[i][j].height+"px";
+          key.style.left = scale * keyboard[i][j].x + "px";
+          key.style.top = scale * keyboard[i][j].y + "px";
+          if( key.style.borderRadius == "" ){
+            key.style.borderRadius = 1/8*scale + "px";
+          }
+        });
+      });
+    }
+  }
+})(JSHelpers)
 
-          rows.selectAll("rect.key")
-            .data(function(d){return d})
-            .enter()
-            .append("rect")
-            .attr("x", function(d){return xScale(d.x)})
-            .attr("y", function(d){return yScale(d.y)})
-            .attr("width", function(d){return xScale(d.width)})
-            .attr("height", function(d){return yScale(d.height)})
-            .attr("rx", function(d){return xScale(0.1)})
-            .attr("ry", function(d){return xScale(0.1)})
-
-
-          rows.selectAll("text.key-name")
-            .data(function(d){return d})
-            .enter()
-            .append("svg:text")
-            .text(function(d){return d.name.toUpperCase()})
-            .attr({fill: 'white', "text-anchor": "middle", "font-size": function(d){return xScale(0.2)}})
-            .attr("x", function(d){return xScale(d.x + d.width/2)})
-            .attr("y", function(d){return yScale(d.y + d.height/2)})
-        }
-      }
-})();
-
-plotter.init(keyboard.build("apple"));
+JSHelpers.ready(  htmlKeyboard.init, htmlKeyboard, [keyboard.build("apple")] )
