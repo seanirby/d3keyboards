@@ -16,6 +16,13 @@ JSHelpers = (function(){
       div.innerHTML = str;
       var elements = div.childNodes;
       return elements[0];
+    },
+
+    setText: function(el, str){
+      if (el.textContent !== undefined)
+        el.textContent = str;
+      else
+        el.innerText = str;
     }
   }
 })()
