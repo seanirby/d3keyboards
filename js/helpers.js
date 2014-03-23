@@ -1,7 +1,7 @@
 var JSHelpers = (function(){
   return {
     // Cross browser on document ready function
-    // Accepts function to call, context,
+    // Accepts function to call, context, and arguments
     ready: function(func, context, arguments){
       if (document.addEventListener){
         document.addEventListener('DOMContentLoaded', func.apply(context, arguments));
