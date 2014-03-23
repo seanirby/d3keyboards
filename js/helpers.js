@@ -1,28 +1,30 @@
 var JSHelpers = (function(){
   return {
-    ready: function(fn, context, args){
+    // Cross browser on document ready function
+    // Accepts function to call, context,
+    ready: function(func, context, arguments){
       if (document.addEventListener){
-        document.addEventListener('DOMContentLoaded', fn.apply(context, args));
+        document.addEventListener('DOMContentLoaded', func.apply(context, arguments));
       } else {
         document.attachEvent('onreadystatechange', function(){
           if(document.readyState === 'interactive')
-            fn.apply(context, args)
+            func.apply(context, arguments)
         })
       }
     },
 
-    createNode: function(str){
+    createNode: function(string){
       var div = document.createElement('div');
-      div.innerHTML = str;
+      div.innerHTML = string;
       var elements = div.childNodes;
       return elements[0];
     },
 
-    setText: function(el, str){
+    setText: function(el, string){
       if (el.textContent !== undefined)
-        el.textContent = str;
+        el.textContent = string;
       else
-        el.innerText = str;
+        el.innerText = string;
     }
   }
 })()
