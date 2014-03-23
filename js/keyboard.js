@@ -44,11 +44,6 @@ var keyboard = (function(){
         tempY,                      // Y position of tempRow
         tempAcc;                    // Length accumulator for positioning keys
 
-    console.log(margin)
-    console.log(widthCharKey)
-    console.log(widthMargin)
-    console.log(widthDeleteKey)
-
     // Build first row (function keys)
     tempRow =[];
     tempNames = ["esc", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", ""];
