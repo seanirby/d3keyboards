@@ -7,13 +7,29 @@ var keyboard = (function(){
     this.height = height;
   }
 
-  function buildAppleKeyboard(){
+  function Keyboard(type, margin){
+    var context = this;
+
+    this.width = 1;
+    this.margin = margin || 1/80;
+    this.keys = buildAppleKeyboard(this.width, this.margin)
+    this.height = (function(){
+      var acc = 0;
+      context.keys.forEach(function(row, i){
+        acc += row[0].height;
+        if(i != 0){ acc += context.margin }
+      })
+      return acc;
+    })();
+  }
+
+  function buildAppleKeyboard(width, margin){
     var keyboard = [];
 
-    var widthCharKey        = 1,    // Exluding spacebar.  Value also equals the height for all keys except top row keys and bottom row keys.
-        widthMargin         = 1/8,  // Just guessing on this one. Values from 1/6 to 1/8 seem reasonable
+    var widthKeyboard       = width,
+        widthMargin         = margin,
+        widthCharKey        = (1 - 13.5 * widthMargin) / 14.5,
         widthDeleteKey      = 1.5 * widthCharKey + 0.5 * widthMargin,
-        widthKeyboard       = 13 * widthCharKey + 13 * widthMargin + widthDeleteKey,
         widthCapsLockKey    = 0.5 * (widthKeyboard - 11 * widthCharKey - 12 * widthMargin), // Value also equals width of enter key
         widthShiftKey       = widthCapsLockKey + 0.5 * widthCharKey + 0.5 * widthMargin,
         widthCommandKey     = widthShiftKey - widthCharKey - widthMargin,
@@ -27,6 +43,11 @@ var keyboard = (function(){
         tempWidths = [],            // Array of key widths (corresponding to variable above)
         tempY,                      // Y position of tempRow
         tempAcc;                    // Length accumulator for positioning keys
+
+    console.log(margin)
+    console.log(widthCharKey)
+    console.log(widthMargin)
+    console.log(widthDeleteKey)
 
     // Build first row (function keys)
     tempRow =[];
@@ -110,16 +131,8 @@ var keyboard = (function(){
   function buildGenericKeyboard(){}
 
   return {
-    build: function(type){
-      if(type == "apple" || undefined){
-        return buildAppleKeyboard();
-      }
-      else if(type == "generic"){
-        return buildGenericKeyboard();
-      }
-      else{
-        return buildAppleKeyboard();
-      }
+    build: function(type, margin){
+      return new Keyboard(type, margin);
     }
   }
 })()
