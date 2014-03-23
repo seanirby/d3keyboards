@@ -29,9 +29,9 @@ body {
 
 .key {
   background: black;
+  display: block;
   border: none;
   color: #FFF;
-  text-transform: uppercase;
   position: absolute;
   top: 0;
   height: 100%;

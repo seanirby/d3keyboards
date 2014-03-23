@@ -1,4 +1,4 @@
-JSHelpers = (function(){
+var JSHelpers = (function(){
   return {
     ready: function(fn, context, args){
       if (document.addEventListener){
