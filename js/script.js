@@ -1,13 +1,21 @@
 htmlKeyboard = (function(JSHelpers){
-  var keyboard, containerElem, keyboardElem, shortcuts;
+  //  Data
+  var keyboard,
+      shortcuts,
+
+  //  DOM Nodes
+      mainContainer,
+      keyboardContainer,
+      shortcutsContainer,
+      keyboardElem;
 
   function createKeyboard(){
     // Temp variables to reference current key-row and key
     var keyElem,
         rowElem;
 
-    containerElem.appendChild(keyboardElem);
-    containerElem.style.paddingBottom = keyboard.height*100 + "%";
+    keyboardContainer.appendChild(keyboardElem);
+    keyboardContainer.style.paddingBottom = keyboard.height*100 + "%";
 
     keyboard.keys.forEach(function(key_row, i){
       createKeyRow(key_row)
@@ -43,16 +51,21 @@ htmlKeyboard = (function(JSHelpers){
   }
 
   function createShortcutList(){
-
+    //
   }
 
   return {
     init: function(kbrd, shrtcts){
-      //Initialize Variables
-      containerElem = document.getElementById("keyboard-container");
-      keyboardElem = JSHelpers.createNode("<div id='keyboard'></div>");
+      //Initialize variables and create containers
       keyboard = kbrd;
       shortcuts = shrtcts;
+      mainContainer = document.getElementById("keyboard-shortcuts-container");
+      keyboardContainer = JSHelpers.createNode("<div id=keyboard-container></div>");
+      keyboardElem = JSHelpers.createNode("<div id='keyboard'></div>");
+      shortcutsContainer = JSHelpers.createNode("<div id='shortcuts-container'></div>");
+      mainContainer.appendChild(keyboardContainer);
+      mainContainer.appendChild(shortcutsContainer);
+      keyboardContainer.appendChild(keyboardElem);
 
       createKeyboard();
       createShortcutList();
