@@ -2,11 +2,12 @@
   width: 80%;
   height: 100%;
   padding: 0 10%;
-  background-color: green;
 }
 
   #keyboard-container{
     position: relative;
+    background-color: #F0F8FF;
+    margin-top: 5%;
   }
 
     #keyboard{
@@ -25,7 +26,7 @@
       }
 
         .key {
-          background: black;
+          background: #282836;
           display: block;
           border: none;
           color: #FFF;
@@ -40,7 +41,14 @@
         }
 
   #shortcuts-container {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     width: 100%;
-    height: 1000px;
-    background-color: pink;
+    background-color: #F0F8FF;
+    margin-top: 5%;
+    border-radius: 10px;
+    font-size: 0.75em;
+    padding: 5px;
+    color: #282836;
   }
