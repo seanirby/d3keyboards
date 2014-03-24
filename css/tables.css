@@ -1,0 +1,45 @@
+table {
+  border-collapse: collapse;
+}
+
+tr {
+  transition: all 0.1s ease-in-out;
+}
+
+tr:nth-child(even) {
+  background-color: #FFF;
+}
+
+tbody > tr:hover{
+  background-color: red;
+  color: #FFF;
+}
+
+th, td {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 5px;
+  width: 0.3333%;
+}
+
+th {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.9em;
+  font-weight: bold;
+  border-bottom: 3px solid #000;
+}
+
+td {
+  background-color: inherit;
+  text-align: center;
+}
+
+td:first-child{
+  text-align: left;
+}
+
+td:last-child {
+  text-align: right;
+}
