@@ -25,39 +25,48 @@ htmlKeyboard = (function(JSHelpers){
     var keyElem,
         rowElem;
 
-    keyboardContainer.appendChild(keyboardElem);
     keyboardContainer.style.paddingBottom = keyboard.height*100 + "%";
 
     keyboard.keys.forEach(function(key_row, i){
       createKeyRow(key_row)
       key_row.forEach(function(key, j){
-        createKey(key);
+        createKey(key, j);
       });
     });
+    keyboardContainer.appendChild(keyboardElem);
 
+    // Helper functions
     function createKeyRow(key_row){
       rowElem = JSHelpers.createNode("<div class='key-row'></div>");
-      keyboardElem.appendChild(rowElem);
       rowElem.style.height = (key_row[0].height/keyboard.height)*100 + "%";
       rowElem.style.top = (key_row[0].y/keyboard.height)*100 + "%";
+      keyboardElem.appendChild(rowElem);
     }
 
-    function createKey(key){
+    function createKey(key, index){
       keyElem = JSHelpers.createNode("<button class='key'></button>");
-      rowElem.appendChild(keyElem);
+      keyElem.setAttribute('id', "key-" + key.name)
       keyElem.style.left = key.x*100 + "%";
       keyElem.style.width = key.width*100 + "%";
-      JSHelpers.setText(keyElem, key.name);
+      JSHelpers.setText(keyElem, key.symbol);
 
+      // Handle special cases, arrow keys, and left-right
       if(key.name == "up" || key.name == "down" || key.name == "left" || key.name == "right"){
         keyElem.style.height = "50%";
         if(key.name == "up"){
           keyElem.style.top = "0";
-        }
-        else{
+        } else{
           keyElem.style.top = "50%";
         }
       }
+      else if(key.name == "shift" || key.name == "alt" || key.name == "super"){
+        if(index < 5) {
+          keyElem.setAttribute('id', keyElem.id + "-left")
+        } else{
+          keyElem.setAttribute('id', keyElem.id + "-right")
+        }
+      }
+      rowElem.appendChild(keyElem);
     }
   }
 
@@ -80,6 +89,7 @@ htmlKeyboard = (function(JSHelpers){
       })
     })
 
+    // Helper functions
     function createShortcutRow(shortcut){
       tr = document.createElement("TR");
       tbody.appendChild(tr);
@@ -112,6 +122,11 @@ htmlKeyboard = (function(JSHelpers){
       createContainers();
       createKeyboard();
       createShortcutList();
+
+      var items = document.getElementsByClassName("key")
+      for (var i = 0; i < items.length; i++) {
+        console.log(items[i].id);
+      };
     }
   }
 })(JSHelpers)
