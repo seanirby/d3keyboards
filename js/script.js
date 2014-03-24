@@ -72,10 +72,7 @@ htmlKeyboard = (function(JSHelpers){
 
   function createShortcutList(){
     // Temp variables for building table
-    var table,
-        tbody,
-        tr,
-        td;
+    var table, tbody, tr, td;
 
     shortcutData.forEach(function(elem, i){
       table = JSHelpers.createTable(["Shortcut", "Command", "Context"]);
@@ -84,8 +81,7 @@ htmlKeyboard = (function(JSHelpers){
 
       elem.shortcuts.forEach(function(shortcut, j){
         createShortcutRow(shortcut)
-
-        //Create highlight event for 'tr', set event to trigger on hover;
+        createHoverEvent(shortcut, tr)
       })
     })
 
@@ -111,6 +107,35 @@ htmlKeyboard = (function(JSHelpers){
       }
       tr.appendChild(td);
     }
+
+    function createHoverEvent(shortcut){
+      var cases = {"shift": null, "super": null, "alt": null};
+
+      //Store an array of id's
+      //TODO: Stop using left key as default. Consider writing an algorithm that chooses based on distance?
+      var commandSequence = shortcut["keys"]
+        .map(function(sequenceString){
+          return sequenceString.split("+").map(function(keyName){
+            return "key-" + keyName + (cases.hasOwnProperty(keyName) ? "-left" : "" );
+          });
+        })
+
+      JSHelpers.addEventListener(tr, 'mouseover', function(){
+        commandSequence.forEach(function(sequence, i){
+          sequence.forEach(function(keyID, j){
+            JSHelpers.addClass( document.getElementById(keyID), "key-highlight" );
+          });
+        });
+      });
+
+      JSHelpers.addEventListener(tr, 'mouseout', function(){
+        commandSequence.forEach(function(sequence, i){
+          sequence.forEach(function(keyID, j){
+            JSHelpers.removeClass( document.getElementById(keyID), "key-highlight" );
+          });
+        });
+      });
+    }
   }
 
   return {
@@ -122,11 +147,6 @@ htmlKeyboard = (function(JSHelpers){
       createContainers();
       createKeyboard();
       createShortcutList();
-
-      var items = document.getElementsByClassName("key")
-      for (var i = 0; i < items.length; i++) {
-        console.log(items[i].id);
-      };
     }
   }
 })(JSHelpers)
