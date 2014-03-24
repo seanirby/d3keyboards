@@ -1,5 +1,5 @@
 var keyboard = (function(){
-  NAMESTOSYMBOLS = {
+  var NAMESTOSYMBOLS = {
     "escape":           "esc",
     "power":            " ",
     "backtick":         "`",
