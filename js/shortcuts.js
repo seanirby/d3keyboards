@@ -9,5 +9,6 @@ var testShortcuts = [{
     { "keys": ["super+s"], "command": "save", "context": "Default"},
     { "keys": ["super+shift+s"], "command": "prompt_save_as", "context": "Default"},
     { "keys": ["super+alt+s"], "command": "save_all", "context": "Default"},
-    { "keys": ["super+w"], "command": "close", "context": "Default"}]
+    { "keys": ["super+w"], "command": "close", "context": "Default"},
+    { "keys": ["super+k", "super+t"], "command": "fold_tag_attributes" }]
 }]
