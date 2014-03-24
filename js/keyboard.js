@@ -1,6 +1,22 @@
 var keyboard = (function(){
+  NAMESTOSYMBOLS = {
+    "escape":           "esc",
+    "power":            " ",
+    "backtick":         "`",
+    "minus":            "-",
+    "equals":           "=",
+    "left-bracket":     "[",
+    "right-bracket":    "]",
+    "back-slash":       "\\",
+    "forward-slash":    "/",
+    "semicolon":        ";",
+    "comma":            ",",
+    "period":           "."
+  }
+
   function Key(name, x, y, width, height){
     this.name = name;
+    this.symbol = NAMESTOSYMBOLS[name] || name
     this.x = x;
     this.y = y;
     this.width = width;
@@ -46,7 +62,7 @@ var keyboard = (function(){
 
     // Build first row (function keys)
     tempRow =[];
-    tempNames = ["esc", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", ""];
+    tempNames = ["escape", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "power"];
     tempY = 0;
     tempNames.forEach(function(elem, i){
       tempRow.push( new Key(elem, i * (widthTopRowKey + widthMargin), tempY, widthTopRowKey, heightTopRowKey));
@@ -55,7 +71,7 @@ var keyboard = (function(){
 
     // Build second row (numbers)
     tempRow = [];
-    tempNames = ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "delete"];
+    tempNames = ["backtick", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equals", "delete"];
     tempY += heightTopRowKey + widthMargin;
     tempNames.forEach(function(elem, i){
       var key = new Key(elem, i * (widthCharKey + widthMargin), tempY, widthCharKey, widthCharKey);
@@ -66,7 +82,7 @@ var keyboard = (function(){
 
     // Build third row (QWERTY)
     tempRow = [];
-    tempNames = ["tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "\\"];
+    tempNames = ["tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "left-bracket", "right-bracket", "back-slash"];
     tempY += widthCharKey + widthMargin;
     tempNames.forEach(function(elem, i){
       var key = new Key(elem, widthDeleteKey + ((i-1) * widthCharKey) + (i * widthMargin), tempY, widthCharKey, widthCharKey);
@@ -80,7 +96,7 @@ var keyboard = (function(){
 
     // Build fourth row (ASDF)
     tempRow = [];
-    tempNames = ["caps-lock", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'", "enter"];
+    tempNames = ["caps-lock", "a", "s", "d", "f", "g", "h", "j", "k", "l", "semicolon", "comma", "enter"];
     tempY += widthCharKey + widthMargin;
     tempNames.forEach(function(elem, i){
       var key = new Key(elem, widthCapsLockKey + ((i-1) * widthCharKey) + (i * widthMargin), tempY, widthCharKey, widthCharKey);
@@ -92,7 +108,7 @@ var keyboard = (function(){
 
     // Build fifth row (ZXCV)
     tempRow = [];
-    tempNames = ["shift", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", "shift"];
+    tempNames = ["shift", "z", "x", "c", "v", "b", "n", "m", "comma", "period", "forward-slash", "shift"];
     tempY += widthCharKey + widthMargin;
     tempNames.forEach(function(elem, i){
       var key = new Key(elem, widthShiftKey + ((i-1) * widthCharKey) + (i * widthMargin), tempY, widthCharKey, widthCharKey);
