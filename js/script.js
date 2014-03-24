@@ -1,5 +1,5 @@
 htmlKeyboard = (function(JSHelpers){
-  //  Data
+  //  Input data
   var keyboard,       //keyboard[Array of Keys][Key]
       shortcutData,   //shortcuts[Array of JS object literals], each object has a 'title' and 'shortcuts' property.
                       //The 'shortcuts' property is an array of JS objects literals, each object has a 'command' and 'description' property;
@@ -9,6 +9,16 @@ htmlKeyboard = (function(JSHelpers){
       keyboardContainer,
       shortcutsContainer,
       keyboardElem;
+
+  function createContainers(){
+    mainContainer = document.getElementById("keyboard-shortcuts-container");
+    keyboardContainer = JSHelpers.createNode("<div id=keyboard-container></div>");
+    keyboardElem = JSHelpers.createNode("<div id='keyboard'></div>");
+    shortcutsContainer = JSHelpers.createNode("<div id='shortcuts-container'></div>");
+    mainContainer.appendChild(keyboardContainer);
+    mainContainer.appendChild(shortcutsContainer);
+    keyboardContainer.appendChild(keyboardElem);
+  }
 
   function createKeyboard(){
     // Temp variables to reference current key-row and key
@@ -58,53 +68,48 @@ htmlKeyboard = (function(JSHelpers){
         tr,
         td;
 
-    console.log(shortcutData);
-
     shortcutData.forEach(function(elem, i){
       table = JSHelpers.createTable(["Shortcut", "Command", "Context"]);
       shortcutsContainer.appendChild(table);
       tbody = table.lastElementChild;
 
       elem.shortcuts.forEach(function(shortcut, j){
-        tr = document.createElement("TR");
-        tbody.appendChild(tr);
-
-        //Add keys
-        td = document.createElement("TD");
-        td.appendChild( document.createTextNode(shortcut["keys"]) );
-        tr.appendChild(td);
-
-        //Add description
-        td = document.createElement("TD");
-        td.appendChild( document.createTextNode(shortcut["command"]) );
-        tr.appendChild(td);
-
-        //Add Context
-        td = document.createElement("TD");
-        if(shortcut["context"]){
-          td.appendChild( document.createTextNode(shortcut["context"]) );
-        }
-        tr.appendChild(td);
+        createShortcutRow(shortcut)
 
         //Create highlight event for 'tr', set event to trigger on hover;
       })
     })
-    function addCommand(){}
+
+    function createShortcutRow(shortcut){
+      tr = document.createElement("TR");
+      tbody.appendChild(tr);
+
+      //Add keys
+      td = document.createElement("TD");
+      td.appendChild( document.createTextNode(shortcut["keys"]) );
+      tr.appendChild(td);
+
+      //Add description
+      td = document.createElement("TD");
+      td.appendChild( document.createTextNode(shortcut["command"]) );
+      tr.appendChild(td);
+
+      //Add Context
+      td = document.createElement("TD");
+      if(shortcut["context"]){
+        td.appendChild( document.createTextNode(shortcut["context"]) );
+      }
+      tr.appendChild(td);
+    }
   }
 
   return {
     init: function(kbrd, shortcuts){
-      //Initialize variables and create containers
+      //Initialize variables
       keyboard = kbrd;
       shortcutData = shortcuts;
-      mainContainer = document.getElementById("keyboard-shortcuts-container");
-      keyboardContainer = JSHelpers.createNode("<div id=keyboard-container></div>");
-      keyboardElem = JSHelpers.createNode("<div id='keyboard'></div>");
-      shortcutsContainer = JSHelpers.createNode("<div id='shortcuts-container'></div>");
-      mainContainer.appendChild(keyboardContainer);
-      mainContainer.appendChild(shortcutsContainer);
-      keyboardContainer.appendChild(keyboardElem);
 
+      createContainers();
       createKeyboard();
       createShortcutList();
     }
