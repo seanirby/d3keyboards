@@ -1,5 +1,6 @@
 var JSHelpers = (function(){
   return {
+
     // Cross browser on document ready function
     // Accepts function to call, context, and arguments
     ready: function(func, context, arguments){
@@ -13,6 +14,8 @@ var JSHelpers = (function(){
       }
     },
 
+    // NOTE: This function doesn't support all node types yet ('th', 'tr', etc..)
+    // TODO: Fix above;
     createNode: function(string){
       var div = document.createElement('div');
       div.innerHTML = string;
@@ -28,14 +31,14 @@ var JSHelpers = (function(){
     },
 
     createTable: function(headings){
-      var table = this.createNode("<table><tr></tr></table>");
+      var acc;
+      headings.forEach(function(elem, i){
+        acc = acc + "<th>" + headings[i] + "</th>";
+      });
+      return this.createNode("<table><thead>" + acc + "</thead><tbody></tbody></table>")
+    },
 
-      // TODO: Create a cross browser forEach function that can maintain context
-      for (var i = 0; i < headings.length; i++) {
-        table.childNodes[0].appendChild( this.createNode("<th>" + headings[i] + "</th>") );
-      };
-
-      return table;
-    }
+    // TODO: Create a cross browser forEach function that maintains context, replace all instances in project
+    forEach: function(arr, func){}
   }
 })()
