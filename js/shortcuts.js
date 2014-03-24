@@ -1,15 +1,13 @@
-var testShortcuts = {
+var testShortcuts = [{
   title: "Default",
 
   shortcuts: [
-    { "keys": ["super+shift+n"], "command": "new_window" },
-    { "keys": ["super+shift+w"], "command": "close_window" },
-    { "keys": ["super+o"], "command": "prompt_open" },
-    { "keys": ["super+shift+t"], "command": "reopen_last_file" },
-    { "keys": ["super+alt+up"], "command": "switch_file", "args": {"extensions": ["cpp", "cxx", "cc", "c", "hpp", "hxx", "h", "ipp", "inl", "m", "mm"]} },
-    { "keys": ["super+n"], "command": "new_file" },
-    { "keys": ["super+s"], "command": "save" },
-    { "keys": ["super+shift+s"], "command": "prompt_save_as" },
-    { "keys": ["super+alt+s"], "command": "save_all" },
-    { "keys": ["super+w"], "command": "close" }]
-}
+    { "keys": ["super+shift+n"], "command": "new_window", "context": "Default"},
+    { "keys": ["super+shift+w"], "command": "close_window", "context": "Default"},
+    { "keys": ["super+o"], "command": "prompt_open", "context": "Default"},
+    { "keys": ["super+shift+t"], "command": "reopen_last_file", "context": "Default"},
+    { "keys": ["super+s"], "command": "save", "context": "Default"},
+    { "keys": ["super+shift+s"], "command": "prompt_save_as", "context": "Default"},
+    { "keys": ["super+alt+s"], "command": "save_all", "context": "Default"},
+    { "keys": ["super+w"], "command": "close", "context": "Default"}]
+}]
