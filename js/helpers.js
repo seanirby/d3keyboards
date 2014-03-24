@@ -25,6 +25,17 @@ var JSHelpers = (function(){
         el.textContent = string;
       else
         el.innerText = string;
+    },
+
+    createTable: function(headings){
+      var table = this.createNode("<table><tr></tr></table>");
+
+      // TODO: Create a cross browser forEach function that can maintain context
+      for (var i = 0; i < headings.length; i++) {
+        table.childNodes[0].appendChild( this.createNode("<th>" + headings[i] + "</th>") );
+      };
+
+      return table;
     }
   }
 })()
