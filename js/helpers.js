@@ -31,10 +31,11 @@ var JSHelpers = (function(){
     },
 
     createTable: function(headings){
-      var acc;
+      var acc = "";
       headings.forEach(function(elem, i){
         acc = acc + "<th>" + headings[i] + "</th>";
       });
+      console.log(acc);
       return this.createNode("<table><thead>" + acc + "</thead><tbody></tbody></table>")
     },
 
