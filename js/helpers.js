@@ -14,6 +14,31 @@ var JSHelpers = (function(){
       }
     },
 
+    addEventListener: function(el, eventName, handler){
+      if (el.addEventListener) {
+        el.addEventListener(eventName, handler);
+      } else {
+        el.attachEvent('on' + eventName, function(){
+          handler.call(el);
+        });
+      }
+    },
+
+    addClass: function(el, clazz){
+      if(el.classList){
+        el.classList.add(clazz)
+      } else {
+        el.className += ' ' + clazz;
+      }
+    },
+
+    removeClass: function(el, clazz){
+      if (el.classList){
+        el.classList.remove(clazz);
+      } else {
+        el.className = el.className.replace(new RegExp('(^|\\b)' + clazz.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+      }
+    },
     // NOTE: This function doesn't support all node types yet ('th', 'tr', etc..)
     // TODO: Fix above;
     createNode: function(string){
@@ -38,7 +63,9 @@ var JSHelpers = (function(){
       return this.createNode("<table><thead>" + acc + "</thead><tbody></tbody></table>")
     },
 
-    // TODO: Create a cross browser forEach function that maintains context, replace all instances in project
-    forEach: function(arr, func){}
+    // TODO: Create a cross browser 'forEach' function that maintains context, replace all instances in project
+    forEach: function(arr, func){},
+    // TODO: Create a cross browser 'map' function
+    map: function(arr, func){},
   }
 })()
