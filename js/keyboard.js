@@ -28,15 +28,14 @@ var keyboard = (function(){
 
     this.width = 1;
     this.margin = margin || 1/80;
-    this.keys = buildAppleKeyboard(this.width, this.margin)
-    this.height = (function(){
-      var acc = 0;
+    this.keys = buildAppleKeyboard(this.width, this.margin);
+    this.height = (function(acc){
       context.keys.forEach(function(row, i){
         acc += row[0].height;
         if(i != 0){ acc += context.margin }
       })
       return acc;
-    })();
+    })(0);
   }
 
   function buildAppleKeyboard(width, margin){
