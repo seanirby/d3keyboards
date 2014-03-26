@@ -24,6 +24,15 @@ var JSHelpers = (function(){
       }
     },
 
+    simulateHover: function(el){
+      var event = new MouseEvent('onmouseover', {
+        'view': window,
+        'bubbles': false,
+        'cancelable': true
+      });
+      el.dispatchEvent(event);
+    },
+
     addClass: function(el, clazz){
       if(el.classList){
         el.classList.add(clazz)
