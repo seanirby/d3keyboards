@@ -34,10 +34,9 @@
           top: 0;
           height: 100%;
           font-size: 1em;
-          transition: all 0.25s ease-in-out;
         }
 
-        .key:hover, .key.key-highlight{
+        .key.key-highlight{
           background-color: red;
         }
 
