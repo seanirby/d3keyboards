@@ -67,6 +67,17 @@ htmlKeyboard = (function(JSHelpers){
         }
       }
       rowElem.appendChild(keyElem);
+      JSHelpers.addEventListener(keyElem, 'mouseover', mouseover);
+      JSHelpers.addEventListener(keyElem, 'mouseout', mouseout);
+    }
+
+    // Event handlers
+    function mouseover(e){
+      JSHelpers.addClass(this, 'key-highlight');
+    }
+
+    function mouseout(e){
+      JSHelpers.removeClass(this, 'key-highlight');
     }
   }
 
@@ -109,7 +120,9 @@ htmlKeyboard = (function(JSHelpers){
     }
 
     function createHoverEvent(shortcut){
-      var cases = {"shift": null, "super": null, "alt": null};
+      var cases = {"shift": null, "super": null, "alt": null},
+          sequenceIndex,
+          timerID;
 
       //Store an array of id's
       //TODO: Stop using left key as default. Consider writing an algorithm that chooses based on distance?
@@ -120,21 +133,58 @@ htmlKeyboard = (function(JSHelpers){
           });
         })
 
-      JSHelpers.addEventListener(tr, 'mouseover', function(){
-        commandSequence.forEach(function(sequence, i){
-          sequence.forEach(function(keyID, j){
-            JSHelpers.addClass( document.getElementById(keyID), "key-highlight" );
-          });
+      if( commandSequence.length > 1){
+        sequenceIndex = 0;
+        commandSequence.push([]);
+        JSHelpers.addEventListener(tr, 'mouseover', function(){
+          timerID = setInterval(function(){
+            for (var i = 0; i < commandSequence.length; i++) {
+              if(i == sequenceIndex){
+                highlightKeys(commandSequence[i]);
+              } else {
+                fadeKeys(commandSequence[i], commandSequence[sequenceIndex]);
+              }
+            };
+
+            if(sequenceIndex == commandSequence.length - 1){
+              sequenceIndex = 0;
+            } else {
+              ++sequenceIndex;
+            }
+            //console.log(sequenceIndex);
+          },400)
+        })
+      } else {
+        JSHelpers.addEventListener(tr, 'mouseover', function(){
+          highlightKeys( commandSequence[0] );
         });
-      });
+      }
 
       JSHelpers.addEventListener(tr, 'mouseout', function(){
         commandSequence.forEach(function(sequence, i){
-          sequence.forEach(function(keyID, j){
-            JSHelpers.removeClass( document.getElementById(keyID), "key-highlight" );
-          });
+          fadeKeys(sequence);
         });
+        sequenceIndex = 0;
+        clearTimeout(timerID);
       });
+
+      function highlightKeys(sequence){
+        sequence.forEach(function(keyID, i){
+          JSHelpers.simulateMouseEvent( document.getElementById(keyID), 'mouseover' );
+        });
+      }
+
+      function fadeKeys(sequence, ignore){
+        sequence.forEach(function(keyID, i){
+          if(ignore){
+            if(JSHelpers.indexOf.call(ignore, keyID) == -1){
+              JSHelpers.simulateMouseEvent( document.getElementById(keyID), 'mouseout' );
+            }
+          } else {
+            JSHelpers.simulateMouseEvent( document.getElementById(keyID), 'mouseout' );
+          }
+        });
+      }
     }
   }
 
