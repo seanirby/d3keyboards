@@ -17,7 +17,6 @@ var keyboard = (function(){
     "period":           "."
   };
 
-  //Arrow keys are handled as a special case;
   var KEY_MAP = [
     ["escape", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "power"],
     ["backtick", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equals", "delete"],
@@ -60,33 +59,30 @@ var keyboard = (function(){
         widthSpacebarKey    = 5 * widthCharKey + 4 * widthMargin,
         widthTopRowKey      = (1/14) * (widthKeyboard - 13 * widthMargin),
         heightBottomRowKey  = widthCharKey + widthMargin,
-        heightTopRowKey     = 0.5 * heightBottomRowKey;
-
-    var uniqueKeyWidths = {
-      "delete": widthDeleteKey,
-      "tab": widthDeleteKey,
-      "caps-lock": widthCapsLockKey,
-      "enter": widthCapsLockKey,
-      "shift": widthShiftKey,
-      "super": widthCommandKey,
-      "spacebar": widthSpacebarKey
-    };
-
-    var arrowKeyXPosition = {
-      "up":  widthKeyboard - 2 * widthCharKey - widthMargin,
-      "down": widthKeyboard - 2 * widthCharKey - widthMargin,
-      "left": widthKeyboard - 3 * widthCharKey - 2 * widthMargin,
-      "right": widthKeyboard - widthCharKey
-    };
-
-    var accX = 0,
+        heightTopRowKey     = 0.5 * heightBottomRowKey,
+        uniqueKeyWidths = {
+          "delete": widthDeleteKey,
+          "tab": widthDeleteKey,
+          "caps-lock": widthCapsLockKey,
+          "enter": widthCapsLockKey,
+          "shift": widthShiftKey,
+          "super": widthCommandKey,
+          "spacebar": widthSpacebarKey
+        },
+        arrowKeyXPosition = {
+          "up":  widthKeyboard - 2 * widthCharKey - widthMargin,
+          "down": widthKeyboard - 2 * widthCharKey - widthMargin,
+          "left": widthKeyboard - 3 * widthCharKey - 2 * widthMargin,
+          "right": widthKeyboard - widthCharKey
+        },
+        accX = 0,
         accY = 0;
 
-    function getHeight(keyName, rowIndex, mapLength){
+    function getHeight(keyName, rowIndex){
       if(rowIndex == 0 || arrowKeyXPosition[keyName]){
         return heightTopRowKey;
       }
-      else if( rowIndex == mapLength - 1 ){
+      else if(rowIndex == KEY_MAP.length - 1){
         return heightTopRowKey * 2;
       }
       else {
@@ -99,14 +95,14 @@ var keyboard = (function(){
 
     return KEY_MAP.map(function(row, i, map){
       accX = 0;
-      accY += i == 0 ? 0 : getHeight(row[0], i - 1, map.length) + widthMargin;
+      accY += i == 0 ? 0 : getHeight(row[0], i - 1) + widthMargin;
       return row.map(function(keyName, j, row){
         accX += j == 0 ? 0 : getWidth(row[j-1], i) + widthMargin;
         return new Key({  name: keyName,
                           x: getX(keyName, accX),
                           y: getY(keyName, accY),
                           width: getWidth(keyName, i),
-                          height: getHeight(keyName, i, row.length) });
+                          height: getHeight(keyName, i) });
       })
     })
   }
