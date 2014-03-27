@@ -83,40 +83,19 @@ var keyboard = (function(){
         accY = 0;
 
     function getHeight(keyName, rowIndex, mapLength){
-      if(rowIndex == 0){
+      if(rowIndex == 0 || arrowKeyXPosition[keyName]){
         return heightTopRowKey;
       }
-      else if( arrowKeyXPosition[keyName]){
-        return heightTopRowKey;
-      }
-      else if( rowIndex == mapLength-1){
+      else if( rowIndex == mapLength - 1 ){
         return heightTopRowKey * 2;
       }
       else {
         return widthCharKey;
       }
     }
-    function getWidth(keyName, rowIndex){
-      if (rowIndex == 0){
-        return widthTopRowKey;
-      } else {
-        return uniqueKeyWidths[keyName] || widthCharKey;
-      }
-    }
-    function getX(keyName, accX){
-      return arrowKeyXPosition[keyName] || accX;
-    }
-    function getY(keyName, accY){
-      if ( arrowKeyXPosition[keyName] ){
-        if (keyName == "up"){
-          return accY;
-        } else {
-          return accY + heightTopRowKey;
-        }
-      } else {
-        return accY;
-      }
-    }
+    function getWidth(keyName, rowIndex){ return rowIndex == 0 ? widthTopRowKey : uniqueKeyWidths[keyName] || widthCharKey }
+    function getX(keyName, acc){ return arrowKeyXPosition[keyName] || acc; }
+    function getY(keyName, acc){ return (arrowKeyXPosition[keyName] && keyName != "up") ? acc + heightTopRowKey : acc }
 
     return KEY_MAP.map(function(row, i, map){
       accX = 0;
@@ -135,8 +114,8 @@ var keyboard = (function(){
   function buildGenericKeyboard(){}
 
   return {
-    build: function(type, margin){
-      return new Keyboard(type, margin);
+    build: function(type){
+      return new Keyboard(type);
     }
   }
 })()
