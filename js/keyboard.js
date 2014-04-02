@@ -34,6 +34,10 @@ var keyboard = (function(){
     this.width = obj.width || 0;
     this.height = obj.height || 0;
   }
+  Key.prototype.convert = function(name, symbol){
+    this.name = name;
+    this.symbol = symbol || name;
+  }
 
   function Keyboard(type){
     this.width = APPLE_WIDTH;
@@ -46,6 +50,19 @@ var keyboard = (function(){
       })
       return acc;
     })(this, 0);
+
+    if(type == "generic"){
+      this.findKey("delete").convert("backspace");
+    }
+  }
+  Keyboard.prototype.findKey = function(keyName){
+    for (var i = 0; i < this.keys.length; i++) {
+      for (var j = 0; j < this.keys[i].length; j++) {
+        if(this.keys[i][j].name == keyName){
+          return this.keys[i][j];
+        }
+      };
+    };
   }
 
   function buildAppleKeyboard(){
@@ -107,7 +124,9 @@ var keyboard = (function(){
     })
   }
 
-  function buildGenericKeyboard(){}
+  function buildGenericKeyboard(){
+
+  }
 
   return {
     build: function(type){

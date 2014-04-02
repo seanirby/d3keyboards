@@ -201,4 +201,4 @@ htmlKeyboard = (function(JSHelpers){
   }
 })(JSHelpers)
 
-JSHelpers.ready(htmlKeyboard.init, htmlKeyboard, [keyboard.build("apple"), testShortcuts])
+JSHelpers.ready(htmlKeyboard.init, htmlKeyboard, [keyboard.build("generic"), testShortcuts])
