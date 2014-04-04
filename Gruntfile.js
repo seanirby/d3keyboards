@@ -26,13 +26,44 @@ module.exports = function(grunt) {
         src: 'js/build/production.js',
         dest: 'js/build/product.min.js'
       }
+    },
+
+    sass: {
+      dist: {
+        options: {
+            style: 'compressed'
+        },
+        files: {
+            'stylesheets/build/main.css': 'stylesheets/main.scss'
+        }
+      }
+    },
+
+    watch: {
+      options: {
+        livereload: true,
+      },
+
+      scripts: {
+        files: ['js/*.js', 'json/*.json'],
+        tasks: ['convertJSON', 'concat', 'uglify'],
+        option: {spawn: false}
+      },
+
+      css: {
+        files: ['stylesheets/*.scss', 'stylesheets/modules/*.scss', 'stylesheets/partials/*.scss', 'stylesheets/vendor/*.scss'],
+        tasks: ['sass'],
+        options: {spawn: false}
+      }
     }
+
   });
 
   // 3. Where we tell Grunt we plan to use this plug-in.
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-
+  grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // 4. Where we tell grunt what to do when we type "grunt" into the terminal
   grunt.registerTask("convertJSON", "Convert json files to javascript", function(){
@@ -48,5 +79,5 @@ module.exports = function(grunt) {
   });
 
   // Tasks with the alias 'default' get run
-  grunt.registerTask('default', ['convertJSON','concat','uglify']);
+  grunt.registerTask('default', ['convertJSON','concat','uglify','sass','watch']);
 }
