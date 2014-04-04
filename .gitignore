@@ -6,5 +6,4 @@ index.html
 .DS_Store
 .sass-cache/*
 *.css
-build/*
 tmp
