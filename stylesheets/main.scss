@@ -1,5 +1,12 @@
-@import 'tables.css';
-@import 'keyboard-shortcuts.css';
+// Modules and Variables
+@import "partials/base";
+
+// Partials
+//@import "partials/reset";
+@import "partials/anchors";
+@import "partials/tables";
+@import "partials/keyboards";
+@import "partials/shortcuts";
 
 body {
   font-size: x-large;
