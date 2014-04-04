@@ -1,0 +1,6 @@
+js/tmp/*
+js/build/*
+node_modules/*
+json/*
+assets/*
+server.rb
