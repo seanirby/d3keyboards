@@ -1,4 +1,4 @@
-this.JSHelpers = {
+var JSHelpers = {
 
   // Cross browser on document ready function
   // Accepts function to call, context, and arguments
