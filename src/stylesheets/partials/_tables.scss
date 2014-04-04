@@ -1,14 +1,17 @@
+table {
+  border-collapse: collapse;
+}
 tr {
   transition: all 0.1s ease-in-out;
 }
 
 tr:nth-child(even) {
-  background-color: #FFF;
+  background-color: $white;
 }
 
 tbody > tr:hover{
-  background-color: red;
-  color: #FFF;
+  background-color: $red;
+  color: $white;
 }
 
 th, td {
@@ -24,7 +27,7 @@ th {
   letter-spacing: 0.1em;
   font-size: 0.9em;
   font-weight: bold;
-  border-bottom: 3px solid #000;
+  border-bottom: 3px solid $black;
 }
 
 td {

@@ -4,37 +4,38 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
 
     convertJSON: {
-      src: 'json/',
-      dest: 'js/tmp/shortcuts.js'
+      src: 'src/json/',
+      dest: 'tmp/shortcuts.js'
     },
 
     // Configuration for concatenating files goes here
     concat: {
       dist: {
         src: [
-          'js/helpers.js',
-          'js/keyboard.js',
-          'js/tmp/shortcuts.js',
-          'js/script.js'
+          'src/js/helpers.js',
+          'src/js/keyboard.js',
+          'tmp/shortcuts.js',
+          'src/js/script.js'
         ],
-        dest: 'js/build/production.js'
+        dest: 'build/production.js'
       }
     },
 
     uglify: {
       build: {
-        src: 'js/build/production.js',
-        dest: 'js/build/product.min.js'
+        src: 'build/production.js',
+        dest: 'build/product.min.js'
       }
     },
 
     sass: {
       dist: {
         options: {
-            style: 'compressed'
+            style: 'compressed',
+            noCache: true
         },
         files: {
-            'stylesheets/build/main.css': 'stylesheets/main.scss'
+            'build/main.css': 'src/stylesheets/main.scss'
         }
       }
     },
@@ -45,13 +46,13 @@ module.exports = function(grunt) {
       },
 
       scripts: {
-        files: ['js/*.js', 'json/*.json'],
+        files: ['src/js/*.js', 'src/json/*.json'],
         tasks: ['convertJSON', 'concat', 'uglify'],
         option: {spawn: false}
       },
 
       css: {
-        files: ['stylesheets/*.scss', 'stylesheets/modules/*.scss', 'stylesheets/partials/*.scss', 'stylesheets/vendor/*.scss'],
+        files: ['src/stylesheets/*.scss', 'src/stylesheets/modules/*.scss', 'src/stylesheets/partials/*.scss', 'src/stylesheets/vendor/*.scss'],
         tasks: ['sass'],
         options: {spawn: false}
       }
