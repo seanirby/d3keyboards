@@ -14,7 +14,7 @@ module.exports = function(grunt) {
         src: [
           'js/helpers.js',
           'js/keyboard.js',
-          'js/tmp/shortcuts',
+          'js/tmp/shortcuts.js',
           'js/script.js'
         ],
         dest: 'js/build/production.js'
