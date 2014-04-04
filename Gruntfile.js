@@ -28,6 +28,20 @@ module.exports = function(grunt) {
       }
     },
 
+    jshint: {
+      files: ['src/js/*.js'],
+      options: {
+        force: true,
+        globals: {
+          console: true,
+          JSHelpers: true,
+          SHORTCUTS: true,
+          keyboard: true,
+          htmlKeyboard: true
+        }
+      }
+    },
+
     sass: {
       dist: {
         options: {
@@ -47,7 +61,7 @@ module.exports = function(grunt) {
 
       scripts: {
         files: ['src/js/*.js', 'src/json/*.json'],
-        tasks: ['convertJSON', 'concat', 'uglify'],
+        tasks: ['jshint','convertJSON', 'concat', 'uglify'],
         option: {spawn: false}
       },
 
@@ -65,6 +79,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
 
   // 4. Where we tell grunt what to do when we type "grunt" into the terminal
   grunt.registerTask("convertJSON", "Convert json files to javascript", function(){
@@ -80,5 +95,5 @@ module.exports = function(grunt) {
   });
 
   // Tasks with the alias 'default' get run
-  grunt.registerTask('default', ['convertJSON','concat','uglify','sass','watch']);
+  grunt.registerTask('default', ['jshint','convertJSON','concat','uglify','sass','watch']);
 }

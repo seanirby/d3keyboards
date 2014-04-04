@@ -2,14 +2,14 @@ var JSHelpers = {
 
   // Cross browser on document ready function
   // Accepts function to call, context, and arguments
-  ready: function(func, context, arguments){
+  ready: function(func, context, args){
     if (document.addEventListener){
-      document.addEventListener('DOMContentLoaded', func.apply(context, arguments));
+      document.addEventListener('DOMContentLoaded', func.apply(context, args));
     } else {
       document.attachEvent('onreadystatechange', function(){
         if(document.readyState === 'interactive')
-          func.apply(context, arguments)
-      })
+          func.apply(context, args);
+      });
     }
   },
 
@@ -39,7 +39,7 @@ var JSHelpers = {
 
   addClass: function(el, clazz){
     if(el.classList){
-      el.classList.add(clazz)
+      el.classList.add(clazz);
     } else {
       el.className += ' ' + clazz;
     }
@@ -74,7 +74,7 @@ var JSHelpers = {
     headings.forEach(function(elem, i){
       acc = acc + "<th>" + headings[i] + "</th>";
     });
-    return this.createNode("<table><thead>" + acc + "</thead><tbody></tbody></table>")
+    return this.createNode("<table><thead>" + acc + "</thead><tbody></tbody></table>");
   },
 
   indexOf: function(needle) {
@@ -90,7 +90,7 @@ var JSHelpers = {
               }
           }
           return index;
-        }
+        };
     }
     return indexOf.call(this, needle);
   },
@@ -98,4 +98,4 @@ var JSHelpers = {
   forEach: function(arr, func){},
   // TODO: Create a cross browser 'map' function
   map: function(arr, func){}
-}
+};

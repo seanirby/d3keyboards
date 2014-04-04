@@ -28,7 +28,7 @@ var htmlKeyboard = (function(JSHelpers){
     keyboardContainer.style.paddingBottom = keyboard.height*100 + "%";
 
     keyboard.keys.forEach(function(key_row, i){
-      createKeyRow(key_row)
+      createKeyRow(key_row);
       key_row.forEach(function(key, j){
         createKey(key, j);
       });
@@ -45,7 +45,7 @@ var htmlKeyboard = (function(JSHelpers){
 
     function createKey(key, index){
       keyElem = JSHelpers.createNode("<button class='key'></button>");
-      keyElem.setAttribute('id', "key-" + key.name)
+      keyElem.setAttribute('id', "key-" + key.name);
       keyElem.style.left = key.x*100 + "%";
       keyElem.style.width = key.width*100 + "%";
       JSHelpers.setText(keyElem, key.symbol);
@@ -61,9 +61,9 @@ var htmlKeyboard = (function(JSHelpers){
       }
       else if(key.name == "shift" || key.name == "alt" || key.name == "super"){
         if(index < 5) {
-          keyElem.setAttribute('id', keyElem.id + "-left")
+          keyElem.setAttribute('id', keyElem.id + "-left");
         } else{
-          keyElem.setAttribute('id', keyElem.id + "-right")
+          keyElem.setAttribute('id', keyElem.id + "-right");
         }
       }
       rowElem.appendChild(keyElem);
@@ -91,10 +91,10 @@ var htmlKeyboard = (function(JSHelpers){
       tbody = table.lastElementChild;
 
       elem.shortcuts.forEach(function(shortcut, j){
-        createShortcutRow(shortcut)
-        createHoverEvent(shortcut, tr)
-      })
-    })
+        createShortcutRow(shortcut);
+        createHoverEvent(shortcut, tr);
+      });
+    });
 
     // Helper functions
     function createShortcutRow(shortcut){
@@ -103,18 +103,18 @@ var htmlKeyboard = (function(JSHelpers){
 
       //Add keys
       td = document.createElement("TD");
-      td.appendChild( document.createTextNode(shortcut["keys"]) );
+      td.appendChild( document.createTextNode(shortcut.keys) );
       tr.appendChild(td);
 
       //Add description
       td = document.createElement("TD");
-      td.appendChild( document.createTextNode(shortcut["command"]) );
+      td.appendChild( document.createTextNode(shortcut.command) );
       tr.appendChild(td);
 
       //Add Context
       td = document.createElement("TD");
-      if(shortcut["context"]){
-        td.appendChild( document.createTextNode(shortcut["context"]) );
+      if(shortcut.context){
+        td.appendChild( document.createTextNode(shortcut.context) );
       }
       tr.appendChild(td);
     }
@@ -126,12 +126,12 @@ var htmlKeyboard = (function(JSHelpers){
 
       //Store an array of id's
       //TODO: Stop using left key as default. Consider writing an algorithm that chooses based on distance?
-      var commandSequence = shortcut["keys"]
+      var commandSequence = shortcut.keys
         .map(function(sequenceString){
           return sequenceString.split("+").map(function(keyName){
             return "key-" + keyName + (cases.hasOwnProperty(keyName) ? "-left" : "" );
           });
-        })
+        });
 
       if( commandSequence.length > 1){
         sequenceIndex = 0;
@@ -144,7 +144,7 @@ var htmlKeyboard = (function(JSHelpers){
               } else {
                 fadeKeys(commandSequence[i], commandSequence[sequenceIndex]);
               }
-            };
+            }
 
             if(sequenceIndex == commandSequence.length - 1){
               sequenceIndex = 0;
@@ -152,8 +152,8 @@ var htmlKeyboard = (function(JSHelpers){
               ++sequenceIndex;
             }
             //console.log(sequenceIndex);
-          },400)
-        })
+          },400);
+        });
       } else {
         JSHelpers.addEventListener(tr, 'mouseover', function(){
           highlightKeys( commandSequence[0] );
@@ -198,7 +198,7 @@ var htmlKeyboard = (function(JSHelpers){
       createKeyboard();
       createShortcutList();
     }
-  }
-})(JSHelpers)
+  };
+})(JSHelpers);
 
-JSHelpers.ready(htmlKeyboard.init, htmlKeyboard, [keyboard.build("generic"), SHORTCUTS])
+JSHelpers.ready(htmlKeyboard.init, htmlKeyboard, [keyboard.build("generic"), SHORTCUTS]);

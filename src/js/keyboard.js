@@ -37,7 +37,7 @@ var keyboard = (function(){
   Key.prototype.convert = function(name, symbol){
     this.name = name;
     this.symbol = symbol || name;
-  }
+  };
 
   function Keyboard(type){
     this.width = APPLE_WIDTH;
@@ -46,8 +46,8 @@ var keyboard = (function(){
     this.height = (function(keyboard, acc){
       keyboard.keys.forEach(function(row, i){
         acc += row[0].height;
-        if(i != 0){ acc += keyboard.margin }
-      })
+        if(i !== 0){ acc += keyboard.margin; }
+      });
       return acc;
     })(this, 0);
 
@@ -61,9 +61,9 @@ var keyboard = (function(){
         if(this.keys[i][j].name == keyName){
           return this.keys[i][j];
         }
-      };
-    };
-  }
+      }
+    }
+  };
 
   function buildAppleKeyboard(){
     var widthKeyboard       = APPLE_WIDTH,
@@ -96,7 +96,7 @@ var keyboard = (function(){
         accY = 0;
 
     function getHeight(keyName, rowIndex){
-      if(rowIndex == 0 || arrowKeyXPosition[keyName]){
+      if(rowIndex === 0 || arrowKeyXPosition[keyName]){
         return heightTopRowKey;
       }
       else if(rowIndex == KEY_MAP.length - 1){
@@ -106,22 +106,22 @@ var keyboard = (function(){
         return widthCharKey;
       }
     }
-    function getWidth(keyName, rowIndex){ return rowIndex == 0 ? widthTopRowKey : uniqueKeyWidths[keyName] || widthCharKey }
+    function getWidth(keyName, rowIndex){ return rowIndex === 0 ? widthTopRowKey : uniqueKeyWidths[keyName] || widthCharKey; }
     function getX(keyName, acc){ return arrowKeyXPosition[keyName] || acc; }
-    function getY(keyName, acc){ return (arrowKeyXPosition[keyName] && keyName != "up") ? acc + heightTopRowKey : acc }
+    function getY(keyName, acc){ return (arrowKeyXPosition[keyName] && keyName !== "up") ? acc + heightTopRowKey : acc; }
 
     return KEY_MAP.map(function(row, i, map){
       accX = 0;
-      accY += i == 0 ? 0 : getHeight(row[0], i - 1) + widthMargin;
+      accY += i === 0 ? 0 : getHeight(row[0], i - 1) + widthMargin;
       return row.map(function(keyName, j, row){
-        accX += j == 0 ? 0 : getWidth(row[j-1], i) + widthMargin;
+        accX += j === 0 ? 0 : getWidth(row[j-1], i) + widthMargin;
         return new Key({  name: keyName,
                           x: getX(keyName, accX),
                           y: getY(keyName, accY),
                           width: getWidth(keyName, i),
                           height: getHeight(keyName, i) });
-      })
-    })
+      });
+    });
   }
 
   function buildGenericKeyboard(){
@@ -132,5 +132,5 @@ var keyboard = (function(){
     build: function(type){
       return new Keyboard(type);
     }
-  }
-})()
+  };
+})();
