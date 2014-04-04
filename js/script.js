@@ -1,4 +1,4 @@
-htmlKeyboard = (function(JSHelpers){
+var htmlKeyboard = (function(JSHelpers){
   //  Input data
   var keyboard,       //keyboard[Array of Keys][Key]
       shortcutData,   //shortcuts[Array of JS object literals], each object has a 'title' and 'shortcuts' property.
@@ -201,4 +201,4 @@ htmlKeyboard = (function(JSHelpers){
   }
 })(JSHelpers)
 
-JSHelpers.ready(htmlKeyboard.init, htmlKeyboard, [keyboard.build("generic"), testShortcuts])
+JSHelpers.ready(htmlKeyboard.init, htmlKeyboard, [keyboard.build("generic"), SHORTCUTS])
