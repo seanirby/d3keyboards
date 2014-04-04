@@ -8,5 +8,4 @@ Shortcut Maps is a javascript project that helps application owners build an emb
 TODO
 ==
 * Add support for PC shortcuts
-* Create build tool
 * Update README
