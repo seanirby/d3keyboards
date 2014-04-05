@@ -1,9 +1,6 @@
 table {
   border-collapse: collapse;
 }
-tr {
-  transition: all 0.1s ease-in-out;
-}
 
 tr:nth-child(even) {
   background-color: $white;
