@@ -38,7 +38,7 @@ var JSHelpers = {
   },
 
   addClass: function(el, clazz){
-    if(!el){ return }
+    if(!el){ return; }
     if(el.classList){
       el.classList.add(clazz);
     } else {
@@ -47,7 +47,7 @@ var JSHelpers = {
   },
 
   removeClass: function(el, clazz){
-    if(!el){ return }
+    if(!el){ return; }
     if (el.classList){
       el.classList.remove(clazz);
     } else {
