@@ -25,18 +25,20 @@ margin-top: 5%;
       }
 
     .key {
-      background: #282836;
+      background-color: $charcoal;
+      border-color: #505050;
       display: block;
-      border: none;
       color: #FFF;
       position: absolute;
       top: 0;
       height: 100%;
       font-size: 1em;
+      border-radius: 0.25em;
     }
 
     .key.key-highlight{
       background-color: $red;
+      border-color: $red;
     }
   }
 
