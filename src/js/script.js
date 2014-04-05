@@ -87,7 +87,7 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
 
   function createSelectors(){
     shortcutData.forEach(function(shortcutList, i){
-      selectorContainer.appendChild( JSHelpers.createNode( "<a class='selector' href='#' id='" + shortcutList.type + "-selector'>" + shortcutList.type + "</a>") );
+      selectorContainer.appendChild( JSHelpers.createNode( "<a class='selector' href='#' onclick='return false' id='" + shortcutList.type + "-selector'>" + shortcutList.type + "</a>") );
     });
 
     for (var i = 0; i < selectorContainer.childNodes.length; i++) {
