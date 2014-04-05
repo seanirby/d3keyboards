@@ -1,5 +1,6 @@
 table {
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 tr:nth-child(even) {
@@ -11,12 +12,16 @@ tbody > tr:hover{
   color: $white;
 }
 
+th{
+  width: 33.3333%;
+}
+
 th, td {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   padding: 5px;
-  width: 0.3333%;
+  white-space: normal;
 }
 
 th {
@@ -30,6 +35,8 @@ th {
 td {
   background-color: inherit;
   text-align: center;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 td:first-child{

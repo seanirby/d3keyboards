@@ -9,12 +9,13 @@
   font-size: 0.75em;
   padding: 5px;
   color: $black;
+  overflow: hidden;
 
   > table{
     display: none
   }
 
   > table.active{
-    display: initial;
+    display: table;
   }
 }
