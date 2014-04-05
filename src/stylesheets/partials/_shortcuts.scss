@@ -9,4 +9,12 @@
   font-size: 0.75em;
   padding: 5px;
   color: $black;
+
+  > table{
+    display: none
+  }
+
+  > table.active{
+    display: initial;
+  }
 }
