@@ -28,6 +28,10 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
     keyboards.forEach(function(keyboard, i){
       keyboardContainer.style.paddingBottom = keyboard.height*100 + "%";
       keyboardElem = JSHelpers.createNode("<div id='" + keyboard.type + "-keyboard'></div>");
+      keyboardElem.style.top = (1/keyboard.height)*keyboard.width*keyboard.margin*100 + "%";
+      keyboardElem.style.bottom = (1/keyboard.height)*keyboard.width*keyboard.margin*100 + "%";
+      keyboardElem.style.left = keyboard.margin*100 + "%";
+      keyboardElem.style.right = keyboard.margin*100 + "%";
       JSHelpers.addClass(keyboardElem, "keyboard");
       keyboard.keys.forEach(function(key_row, i){
         createKeyRow(keyboard, key_row);
