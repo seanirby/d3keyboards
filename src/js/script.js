@@ -86,7 +86,7 @@ var htmlKeyboard = (function(JSHelpers){
 
   function createSelectors(){
     shortcutData.forEach(function(shortcutList, i){
-      selectorContainer.appendChild( JSHelpers.createNode( "<button id='" + shortcutList.type + "-selector'>" + shortcutList.type + "</button>") );
+      selectorContainer.appendChild( JSHelpers.createNode( "<a class='selector' href='#' id='" + shortcutList.type + "-selector'>" + shortcutList.type + "</a>") );
     });
 
     for (var i = 0; i < selectorContainer.childNodes.length; i++) {
@@ -99,7 +99,9 @@ var htmlKeyboard = (function(JSHelpers){
 
       //Hide currently active keyboard
       //Hide curreently active shortcut list
-      JSHelpers.removeClass( document.querySelectorAll("#shortcuts-container table.active")[0], "active" );
+      JSHelpers.removeClass( document.querySelectorAll("#selector-container .active")[0], "active");
+      JSHelpers.removeClass( document.querySelectorAll("#shortcuts-container .active")[0], "active" );
+      JSHelpers.addClass(this, "active");
       JSHelpers.addClass(selected, "active");
     }
   }
