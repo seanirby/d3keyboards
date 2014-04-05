@@ -7,6 +7,7 @@ var htmlKeyboard = (function(JSHelpers){
   //  DOM Nodes
       mainContainer,
       keyboardContainer,
+      selectorContainer,
       shortcutsContainer,
       keyboardElem;
 
@@ -14,8 +15,10 @@ var htmlKeyboard = (function(JSHelpers){
     mainContainer = document.getElementById("keyboard-shortcuts-container");
     keyboardContainer = JSHelpers.createNode("<div id=keyboard-container></div>");
     keyboardElem = JSHelpers.createNode("<div id='keyboard'></div>");
+    selectorContainer = JSHelpers.createNode("<div id='selector-container'></div>");
     shortcutsContainer = JSHelpers.createNode("<div id='shortcuts-container'></div>");
     mainContainer.appendChild(keyboardContainer);
+    mainContainer.appendChild(selectorContainer);
     mainContainer.appendChild(shortcutsContainer);
     keyboardContainer.appendChild(keyboardElem);
   }
@@ -81,16 +84,37 @@ var htmlKeyboard = (function(JSHelpers){
     }
   }
 
+  function createSelectors(){
+    shortcutData.forEach(function(shortcutList, i){
+      selectorContainer.appendChild( JSHelpers.createNode( "<button id='" + shortcutList.type + "-selector'>" + shortcutList.type + "</button>") );
+    });
+
+    for (var i = 0; i < selectorContainer.childNodes.length; i++) {
+      JSHelpers.addEventListener( selectorContainer.childNodes[i], 'click', changeKeyboards);
+    }
+
+    function changeKeyboards(){
+      var type = this.id.replace('-selector', ''),
+          selected = document.getElementById(type + "-shortcuts");
+
+      //Hide currently active keyboard
+      //Hide curreently active shortcut list
+      JSHelpers.removeClass( document.querySelectorAll("#shortcuts-container table.active")[0], "active" );
+      JSHelpers.addClass(selected, "active");
+    }
+  }
+
   function createShortcutList(){
     // Temp variables for building table
     var table, tbody, tr, td;
 
-    shortcutData.forEach(function(elem, i){
+    shortcutData.forEach(function(shortcutList, i){
       table = JSHelpers.createTable(["Shortcut", "Command", "Context"]);
+      table.setAttribute('id', shortcutList.type + "-shortcuts");
       shortcutsContainer.appendChild(table);
       tbody = table.lastElementChild;
 
-      elem.shortcuts.forEach(function(shortcut, j){
+      shortcutList.shortcuts.forEach(function(shortcut, j){
         createShortcutRow(shortcut);
         createHoverEvent(shortcut, tr);
       });
@@ -196,6 +220,7 @@ var htmlKeyboard = (function(JSHelpers){
 
       createContainers();
       createKeyboard();
+      createSelectors();
       createShortcutList();
     }
   };
