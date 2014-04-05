@@ -176,7 +176,6 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
             } else {
               ++sequenceIndex;
             }
-            //console.log(sequenceIndex);
           },400);
         });
       } else {
@@ -195,7 +194,6 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
 
       function highlightKeys(sequence){
         sequence.forEach(function(keyClass, i){
-          console.log("#keyboard-container .keyboard.active ." + keyClass);
           JSHelpers.simulateMouseEvent( document.querySelectorAll("#keyboard-container .keyboard.active ." + keyClass)[0], 'mouseover' );
         });
       }
