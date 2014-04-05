@@ -38,6 +38,7 @@ var JSHelpers = {
   },
 
   addClass: function(el, clazz){
+    if(!el){ return }
     if(el.classList){
       el.classList.add(clazz);
     } else {
@@ -46,11 +47,20 @@ var JSHelpers = {
   },
 
   removeClass: function(el, clazz){
+    if(!el){ return }
     if (el.classList){
       el.classList.remove(clazz);
     } else {
       el.className = el.className.replace(new RegExp('(^|\\b)' + clazz.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
     }
+  },
+
+  show: function(el){
+    el.style.display = "initial";
+  },
+
+  hide: function(el){
+    el.style.display = "none";
   },
 
   // NOTE: This function doesn't support all node types yet ('th', 'tr', etc..)
