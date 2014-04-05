@@ -36,8 +36,8 @@ module.exports = function(grunt) {
           console: true,
           JSHelpers: true,
           SHORTCUTS: true,
-          keyboard: true,
-          htmlKeyboard: true
+          keyboardModule: true,
+          htmlKeyboardModule: true
         }
       }
     },

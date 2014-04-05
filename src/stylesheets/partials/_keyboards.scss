@@ -1,41 +1,46 @@
-#keyboard-shortcuts-container{
+#keyboard-shortcuts-container {
   width: 80%;
   height: 100%;
   padding: 0 10%;
 }
 
-#keyboard-container{
+#keyboard-container {
 position: relative;
 background-color: $white;
 margin-top: 5%;
-}
 
-#keyboard{
-position: absolute;
-top: 0;
-left: 0;
-bottom: 0;
-right: 0;
-font-size: 0.5em;
-
-  .key-row{
-  position: absolute;
-  left: 0;
-  right: 0;
-  }
-
-  .key {
-    background: #282836;
-    display: block;
-    border: none;
-    color: #FFF;
+  .keyboard {
     position: absolute;
     top: 0;
-    height: 100%;
-    font-size: 1em;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    font-size: 0.5em;
+    display: none;
+
+    .key-row {
+      position: absolute;
+      left: 0;
+      right: 0;
+      }
+
+    .key {
+      background: #282836;
+      display: block;
+      border: none;
+      color: #FFF;
+      position: absolute;
+      top: 0;
+      height: 100%;
+      font-size: 1em;
+    }
+
+    .key.key-highlight{
+      background-color: $red;
+    }
   }
 
-  .key.key-highlight{
-    background-color: $red;
+  .keyboard.active {
+    display: initial;
   }
 }

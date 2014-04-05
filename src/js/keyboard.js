@@ -1,4 +1,4 @@
-var keyboard = (function(){
+var keyboardModule = (function(){
   var APPLE_WIDTH = 1,
       APPLE_MARGIN = 1/100;
 
@@ -42,6 +42,7 @@ var keyboard = (function(){
   function Keyboard(type){
     this.width = APPLE_WIDTH;
     this.margin = APPLE_MARGIN;
+    this.type = type || "apple";
     this.keys = buildAppleKeyboard();
     this.height = (function(keyboard, acc){
       keyboard.keys.forEach(function(row, i){
@@ -51,7 +52,7 @@ var keyboard = (function(){
       return acc;
     })(this, 0);
 
-    if(type == "generic"){
+    if(this.type === "pc"){
       this.findKey("delete").convert("backspace");
     }
   }

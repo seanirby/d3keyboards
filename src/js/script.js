@@ -1,45 +1,45 @@
-var htmlKeyboard = (function(JSHelpers){
-  //  Input data
-  var keyboard,       //keyboard[Array of Keys][Key]
-      shortcutData,   //shortcuts[Array of JS object literals], each object has a 'title' and 'shortcuts' property.
-                      //The 'shortcuts' property is an array of JS objects literals, each object has a 'command' and 'description' property;
+var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
+  var keyboards = shortcutData.map(function(keyboard){
+    return keyboardModule.build( keyboard.type );
+  });
 
   //  DOM Nodes
-      mainContainer,
+  var mainContainer,
       keyboardContainer,
       selectorContainer,
-      shortcutsContainer,
-      keyboardElem;
+      shortcutsContainer;
 
   function createContainers(){
     mainContainer = document.getElementById("keyboard-shortcuts-container");
     keyboardContainer = JSHelpers.createNode("<div id=keyboard-container></div>");
-    keyboardElem = JSHelpers.createNode("<div id='keyboard'></div>");
     selectorContainer = JSHelpers.createNode("<div id='selector-container'></div>");
     shortcutsContainer = JSHelpers.createNode("<div id='shortcuts-container'></div>");
     mainContainer.appendChild(keyboardContainer);
     mainContainer.appendChild(selectorContainer);
     mainContainer.appendChild(shortcutsContainer);
-    keyboardContainer.appendChild(keyboardElem);
   }
 
   function createKeyboard(){
     // Temp variables to reference current key-row and key
-    var keyElem,
+    var keyboardElem,
+        keyElem,
         rowElem;
 
-    keyboardContainer.style.paddingBottom = keyboard.height*100 + "%";
-
-    keyboard.keys.forEach(function(key_row, i){
-      createKeyRow(key_row);
-      key_row.forEach(function(key, j){
-        createKey(key, j);
+    keyboards.forEach(function(keyboard, i){
+      keyboardContainer.style.paddingBottom = keyboard.height*100 + "%";
+      keyboardElem = JSHelpers.createNode("<div id='" + keyboard.type + "-keyboard'></div>");
+      JSHelpers.addClass(keyboardElem, "keyboard");
+      keyboard.keys.forEach(function(key_row, i){
+        createKeyRow(keyboard, key_row);
+        key_row.forEach(function(key, j){
+          createKey(key, j);
+        });
       });
+      keyboardContainer.appendChild(keyboardElem);
     });
-    keyboardContainer.appendChild(keyboardElem);
 
     // Helper functions
-    function createKeyRow(key_row){
+    function createKeyRow(keyboard, key_row){
       rowElem = JSHelpers.createNode("<div class='key-row'></div>");
       rowElem.style.height = (key_row[0].height/keyboard.height)*100 + "%";
       rowElem.style.top = (key_row[0].y/keyboard.height)*100 + "%";
@@ -48,7 +48,7 @@ var htmlKeyboard = (function(JSHelpers){
 
     function createKey(key, index){
       keyElem = JSHelpers.createNode("<button class='key'></button>");
-      keyElem.setAttribute('id', "key-" + key.name);
+      JSHelpers.addClass(keyElem, "key-" + key.name);
       keyElem.style.left = key.x*100 + "%";
       keyElem.style.width = key.width*100 + "%";
       JSHelpers.setText(keyElem, key.symbol);
@@ -63,10 +63,11 @@ var htmlKeyboard = (function(JSHelpers){
         }
       }
       else if(key.name == "shift" || key.name == "alt" || key.name == "super"){
+        JSHelpers.removeClass(keyElem, "key-" + key.name);
         if(index < 5) {
-          keyElem.setAttribute('id', keyElem.id + "-left");
+          JSHelpers.addClass(keyElem, "key-" + key.name + "-left");
         } else{
-          keyElem.setAttribute('id', keyElem.id + "-right");
+          JSHelpers.addClass(keyElem, "key-" + key.name + "-right");
         }
       }
       rowElem.appendChild(keyElem);
@@ -90,19 +91,17 @@ var htmlKeyboard = (function(JSHelpers){
     });
 
     for (var i = 0; i < selectorContainer.childNodes.length; i++) {
-      JSHelpers.addEventListener( selectorContainer.childNodes[i], 'click', changeKeyboards);
+      JSHelpers.addEventListener( selectorContainer.childNodes[i], 'click', changeType);
     }
 
-    function changeKeyboards(){
-      var type = this.id.replace('-selector', ''),
-          selected = document.getElementById(type + "-shortcuts");
-
-      //Hide currently active keyboard
-      //Hide curreently active shortcut list
+    function changeType(){
+      var type = this.id.replace('-selector', '');
+      JSHelpers.removeClass( document.querySelectorAll("#keyboard-container .active")[0], "active");
       JSHelpers.removeClass( document.querySelectorAll("#selector-container .active")[0], "active");
       JSHelpers.removeClass( document.querySelectorAll("#shortcuts-container .active")[0], "active" );
+      JSHelpers.addClass(document.getElementById(type + "-keyboard"), "active");
       JSHelpers.addClass(this, "active");
-      JSHelpers.addClass(selected, "active");
+      JSHelpers.addClass(document.getElementById(type + "-shortcuts"), "active");
     }
   }
 
@@ -195,19 +194,20 @@ var htmlKeyboard = (function(JSHelpers){
       });
 
       function highlightKeys(sequence){
-        sequence.forEach(function(keyID, i){
-          JSHelpers.simulateMouseEvent( document.getElementById(keyID), 'mouseover' );
+        sequence.forEach(function(keyClass, i){
+          console.log("#keyboard-container .keyboard.active ." + keyClass);
+          JSHelpers.simulateMouseEvent( document.querySelectorAll("#keyboard-container .keyboard.active ." + keyClass)[0], 'mouseover' );
         });
       }
 
       function fadeKeys(sequence, ignore){
-        sequence.forEach(function(keyID, i){
+        sequence.forEach(function(keyClass, i){
           if(ignore){
-            if(JSHelpers.indexOf.call(ignore, keyID) == -1){
-              JSHelpers.simulateMouseEvent( document.getElementById(keyID), 'mouseout' );
+            if(JSHelpers.indexOf.call(ignore, keyClass) == -1){
+              JSHelpers.simulateMouseEvent( document.querySelectorAll("#keyboard-container .keyboard.active ." + keyClass)[0], 'mouseout' );
             }
           } else {
-            JSHelpers.simulateMouseEvent( document.getElementById(keyID), 'mouseout' );
+            JSHelpers.simulateMouseEvent( document.querySelectorAll("#keyboard-container .keyboard.active ." + keyClass)[0], 'mouseout' );
           }
         });
       }
@@ -215,17 +215,16 @@ var htmlKeyboard = (function(JSHelpers){
   }
 
   return {
-    init: function(kbrd, shortcuts){
-      //Initialize variables
-      keyboard = kbrd;
-      shortcutData = shortcuts;
-
+    init: function(){
       createContainers();
       createKeyboard();
       createSelectors();
       createShortcutList();
+
+      //Select first keyboard selector to initialize
+      JSHelpers.simulateMouseEvent(document.querySelectorAll("#selector-container .selector")[0], "click");
     }
   };
-})(JSHelpers);
+})(JSHelpers, SHORTCUTS, keyboardModule);
 
-JSHelpers.ready(htmlKeyboard.init, htmlKeyboard, [keyboard.build("generic"), SHORTCUTS]);
+JSHelpers.ready(htmlKeyboardModule.init, htmlKeyboardModule);
