@@ -108,7 +108,6 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
   }
 
   function createShortcutLists(){
-    // Temp variables for building table
     var table, tbody, tr, td;
 
     shortcutData.forEach(function(shortcutList, i){
@@ -123,21 +122,16 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
       shortcutsContainer.appendChild(table);
     });
 
-    // Helper functions
     function createShortcutRow(shortcut){
       tr = document.createElement("TR");
-
-      //Add keys
       td = document.createElement("TD");
       td.appendChild( document.createTextNode(shortcut.keys) );
       tr.appendChild(td);
 
-      //Add description
       td = document.createElement("TD");
       td.appendChild( document.createTextNode(shortcut.command) );
       tr.appendChild(td);
 
-      //Add Context
       td = document.createElement("TD");
       if(shortcut.context){
         td.appendChild( document.createTextNode(shortcut.context) );
@@ -219,8 +213,6 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
       createKeyboards( shortcutData.map(function(keyboard){ return keyboardModule.build( keyboard.type ); }));
       createSelectors();
       createShortcutLists();
-
-      //Select first keyboard selector to initialize
       JSHelpers.simulateMouseEvent(document.querySelectorAll("#selector-container .selector")[0], "click");
     }
   };
