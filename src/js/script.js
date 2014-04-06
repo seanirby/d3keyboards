@@ -1,8 +1,5 @@
+// TODO: Refactor to minimize DOM reflows
 var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
-  var keyboards = shortcutData.map(function(keyboard){
-    return keyboardModule.build( keyboard.type );
-  });
-
   //  DOM Nodes
   var mainContainer,
       keyboardContainer,
@@ -11,15 +8,17 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
 
   function createContainers(){
     mainContainer = document.getElementById("keyboard-shortcuts-container");
+    mainContainer.parentNode.removeChild(mainContainer);
     keyboardContainer = JSHelpers.createNode("<div id=keyboard-container></div>");
     selectorContainer = JSHelpers.createNode("<div id='selector-container'></div>");
     shortcutsContainer = JSHelpers.createNode("<div id='shortcuts-container'></div>");
     mainContainer.appendChild(keyboardContainer);
     mainContainer.appendChild(selectorContainer);
     mainContainer.appendChild(shortcutsContainer);
+    document.body.appendChild(mainContainer);
   }
 
-  function createKeyboard(){
+  function createKeyboards(keyboards){
     // Temp variables to reference current key-row and key
     var keyboardElem,
         keyElem,
@@ -75,16 +74,16 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
         }
       }
       rowElem.appendChild(keyElem);
-      JSHelpers.addEventListener(keyElem, 'mouseover', mouseover);
-      JSHelpers.addEventListener(keyElem, 'mouseout', mouseout);
+      JSHelpers.addEventListener(keyElem, 'mouseover', mouseOver);
+      JSHelpers.addEventListener(keyElem, 'mouseout', mouseOut);
     }
 
     // Event handlers
-    function mouseover(e){
+    function mouseOver(e){
       JSHelpers.addClass(this, 'key-highlight');
     }
 
-    function mouseout(e){
+    function mouseOut(e){
       JSHelpers.removeClass(this, 'key-highlight');
     }
   }
@@ -109,26 +108,25 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
     }
   }
 
-  function createShortcutList(){
+  function createShortcutLists(){
     // Temp variables for building table
     var table, tbody, tr, td;
 
     shortcutData.forEach(function(shortcutList, i){
       table = JSHelpers.createTable(["Shortcut", "Command", "Context"]);
       table.setAttribute('id', shortcutList.type + "-shortcuts");
-      shortcutsContainer.appendChild(table);
       tbody = table.lastElementChild;
 
       shortcutList.shortcuts.forEach(function(shortcut, j){
         createShortcutRow(shortcut);
         createHoverEvent(shortcut, tr);
       });
+      shortcutsContainer.appendChild(table);
     });
 
     // Helper functions
     function createShortcutRow(shortcut){
       tr = document.createElement("TR");
-      tbody.appendChild(tr);
 
       //Add keys
       td = document.createElement("TD");
@@ -146,6 +144,7 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
         td.appendChild( document.createTextNode(shortcut.context) );
       }
       tr.appendChild(td);
+      tbody.appendChild(tr);
     }
 
     function createHoverEvent(shortcut){
@@ -153,7 +152,6 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
           sequenceIndex,
           timerID;
 
-      //Store an array of id's
       //TODO: Stop using left key as default. Consider writing an algorithm that chooses based on distance?
       var commandSequence = shortcut.keys
         .map(function(sequenceString){
@@ -219,9 +217,9 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
   return {
     init: function(){
       createContainers();
-      createKeyboard();
+      createKeyboards( shortcutData.map(function(keyboard){ return keyboardModule.build( keyboard.type ); }));
       createSelectors();
-      createShortcutList();
+      createShortcutLists();
 
       //Select first keyboard selector to initialize
       JSHelpers.simulateMouseEvent(document.querySelectorAll("#selector-container .selector")[0], "click");
