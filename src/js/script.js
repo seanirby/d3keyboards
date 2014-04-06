@@ -1,4 +1,3 @@
-// TODO: Refactor to minimize DOM reflows
 var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
   //  DOM Nodes
   var mainContainer,
