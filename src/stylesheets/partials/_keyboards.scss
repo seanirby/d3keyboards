@@ -22,7 +22,7 @@
       position: absolute;
       left: 0;
       right: 0;
-      }
+    }
 
     .key {
       padding: 0;
@@ -34,7 +34,10 @@
       top: 0;
       height: 100%;
       border-radius: 0.25em;
-      font-size: 0.5em; }
+      font-size: 0.5em;
+      outline: 0;
+    }
+
     .key.key-highlight{
       background-color: $red;
       border-color: $red;

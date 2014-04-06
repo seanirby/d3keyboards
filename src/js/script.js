@@ -1,12 +1,13 @@
 var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
   //  DOM Nodes
-  var mainContainer,
-      keyboardContainer,
+  var keyboardContainer,
       selectorContainer,
       shortcutsContainer;
 
   function createContainers(){
-    mainContainer = document.getElementById("keyboard-shortcuts-container");
+    var mainContainer = document.getElementById("keyboard-shortcuts-container"),
+        parent = mainContainer.parentNode;
+
     mainContainer.parentNode.removeChild(mainContainer);
     keyboardContainer = JSHelpers.createNode("<div id=keyboard-container></div>");
     selectorContainer = JSHelpers.createNode("<div id='selector-container'></div>");
@@ -14,7 +15,7 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
     mainContainer.appendChild(keyboardContainer);
     mainContainer.appendChild(selectorContainer);
     mainContainer.appendChild(shortcutsContainer);
-    document.body.appendChild(mainContainer);
+    parent.appendChild(mainContainer);
   }
 
   function createKeyboards(keyboards){
@@ -89,7 +90,7 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
 
   function createSelectors(){
     shortcutData.forEach(function(shortcutList, i){
-      selectorContainer.appendChild( JSHelpers.createNode( "<a class='selector' href='#' onclick='return false' id='" + shortcutList.type + "-selector'>" + shortcutList.type + "</a>") );
+      selectorContainer.appendChild( JSHelpers.createNode( "<div class='selector' id='" + shortcutList.type + "-selector'>" + shortcutList.type + "</div>") );
     });
 
     for (var i = 0; i < selectorContainer.childNodes.length; i++) {
@@ -105,6 +106,11 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
       JSHelpers.addClass(this, "active");
       JSHelpers.addClass(document.getElementById(type + "-shortcuts"), "active");
     }
+  }
+
+  function createFilter(){
+    var filter = JSHelpers.createNode("<div id='shortcut-filter' class='selector selector-filter'><form><input type='text' placeholder='Filter by Command'/></form></div>")
+    selectorContainer.appendChild(filter);
   }
 
   function createShortcutLists(){
@@ -212,6 +218,7 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
       createContainers();
       createKeyboards( shortcutData.map(function(keyboard){ return keyboardModule.build( keyboard.type ); }));
       createSelectors();
+      createFilter();
       createShortcutLists();
       JSHelpers.simulateMouseEvent(document.querySelectorAll("#selector-container .selector")[0], "click");
     }
