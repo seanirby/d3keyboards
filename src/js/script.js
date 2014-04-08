@@ -1,8 +1,9 @@
 var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
-  //  DOM Nodes
+  //  DOM Nodes of commonly referenced items;
   var keyboardContainer,
       selectorContainer,
-      shortcutsContainer;
+      shortcutsContainer,
+      shortcutFilter;
 
   function createContainers(){
     var mainContainer = document.getElementById("keyboard-shortcuts-container"),
@@ -97,11 +98,14 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
       JSHelpers.addEventListener( selectorContainer.childNodes[i], 'click', changeType);
     }
 
-    function changeType(){
+    function changeType(e){
       var type = this.id.replace('-selector', '');
-      JSHelpers.removeClass( document.querySelectorAll("#keyboard-container .active")[0], "active");
-      JSHelpers.removeClass( document.querySelectorAll("#selector-container .active")[0], "active");
-      JSHelpers.removeClass( document.querySelectorAll("#shortcuts-container .active")[0], "active" );
+
+      e.preventDefault();
+      JSHelpers.removeClass( document.querySelectorAll("#keyboard-container  .active")[0], "active");
+      JSHelpers.removeClass( document.querySelectorAll("#selector-container > .active")[0], "active");
+      JSHelpers.removeClass( document.querySelectorAll("#shortcuts-container > .active")[0], "active");
+      console.log( document.querySelectorAll("#shortcuts-container .active")[0] );
       JSHelpers.addClass(document.getElementById(type + "-keyboard"), "active");
       JSHelpers.addClass(this, "active");
       JSHelpers.addClass(document.getElementById(type + "-shortcuts"), "active");
@@ -109,8 +113,10 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
   }
 
   function createFilter(){
-    var filter = JSHelpers.createNode("<div id='shortcut-filter' class='selector selector-filter'><form><input type='text' placeholder='Filter by Command'/></form></div>")
+    // TODO: Clean this function up
+    var filter = JSHelpers.createNode("<div id='shortcut-filter-container' class='selector selector-filter'><form><input id='shortcut-filter' type='text' placeholder=''/></form></div>");
     selectorContainer.appendChild(filter);
+    shortcutFilter = document.getElementById("shortcut-filter");
   }
 
   function createShortcutLists(){
@@ -125,8 +131,36 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
         createShortcutRow(shortcut);
         createHoverEvent(shortcut, tr);
       });
+
+      modifyTableHeadings();
       shortcutsContainer.appendChild(table);
     });
+
+    function modifyTableHeadings(){
+      var headings = table.getElementsByTagName("th"),
+          type;
+      for (var i = 0; i < headings.length; i++) {
+        type = headings[i].innerHTML.toLowerCase();
+        JSHelpers.addClass(headings[i], type + "-column");
+        JSHelpers.addEventListener(headings[i], 'click', changeFilterContext);
+      }
+    }
+
+    function changeFilterContext(e){
+      var headings = document.querySelectorAll("th"),
+          filterType = this.innerHTML.toLowerCase();
+
+      e.preventDefault();
+      for (var i = 0; i < headings.length; i++) {
+        JSHelpers.removeClass(headings[i], "active");
+        if(headings[i].innerHTML.toLowerCase() === filterType){
+          JSHelpers.addClass(headings[i], "active");
+        }
+      }
+      // TODO: Clean up the placeholder so it's capitalized not uppercase
+      document.getElementById("shortcut-filter").setAttribute('placeholder', "Filter By " + filterType.toUpperCase());
+      // TODO: Trigger a type event in the filter;
+    }
 
     function createShortcutRow(shortcut){
       tr = document.createElement("TR");
@@ -213,6 +247,32 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
     }
   }
 
+  function filterShortcuts(e){
+    // TODO: Verify this RegEx is appropriate;
+    var filterPattern = new RegExp(".*" + shortcutFilter.value.toLowerCase().split("").join(".*") + ".*"),
+        activeFilter,
+        columnNumber,
+        rows,
+        td,
+        arr;
+
+    if( document.activeElement === shortcutFilter){
+      console.log("triggering on click");
+      activeFilter = document.querySelectorAll("th.active")[0];
+      // TODO: Statement below isn't supported below IE9;
+      j = Array.prototype.indexOf.call(activeFilter.parentNode.children, activeFilter);
+      rows = document.querySelectorAll("tbody > tr");
+      for (var i = 0; i < rows.length; i++) {
+        td = rows[i].children[j];
+        if(!filterPattern.test( td.innerHTML.toLowerCase() )){
+          JSHelpers.addClass(rows[i], "hide");
+        } else {
+          JSHelpers.removeClass(rows[i], "hide");
+        }
+      }
+    }
+  }
+
   return {
     init: function(){
       createContainers();
@@ -220,7 +280,13 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
       createSelectors();
       createFilter();
       createShortcutLists();
+
+      JSHelpers.addEventListener(window, "keyup", filterShortcuts);
+
+
+      // TODO: Let user select default table and filter context to display rather than the first one
       JSHelpers.simulateMouseEvent(document.querySelectorAll("#selector-container .selector")[0], "click");
+      JSHelpers.simulateMouseEvent(document.querySelectorAll(".command-column")[0], "click");
     }
   };
 })(JSHelpers, SHORTCUTS, keyboardModule);
