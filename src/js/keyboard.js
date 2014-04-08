@@ -125,13 +125,23 @@ var keyboardModule = (function(){
     });
   }
 
-  function buildGenericKeyboard(){
-
-  }
-
   return {
     build: function(type){
       return new Keyboard(type);
+    },
+    getNameFromSymbol: function(keyName){
+      for(key in NAME_TO_SYMBOL){
+        if(NAME_TO_SYMBOL[key] === keyName){
+          return key;
+        }
+      }
+    },
+    capitalizeIfFunctionKey:  function(keyName){
+      // TODO: Use a more precise Regex for testing for funciton keys F1-F12
+      if(/^f|F{1,1}[0-9]{1,1}[0-2]?/.test(keyName)){
+        return keyName.toUpperCase();
+      }
     }
+
   };
 })();
