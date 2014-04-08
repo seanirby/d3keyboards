@@ -74,6 +74,7 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
           JSHelpers.addClass(keyElem, "key-" + key.name + "-right");
         }
       }
+
       rowElem.appendChild(keyElem);
       JSHelpers.addEventListener(keyElem, 'mouseover', mouseOver);
       JSHelpers.addEventListener(keyElem, 'mouseout', mouseOut);
@@ -115,6 +116,7 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
   function createFilter(){
     // TODO: Clean this function up
     var filter = JSHelpers.createNode("<div id='shortcut-filter-container' class='selector selector-filter'><form><input id='shortcut-filter' type='text' placeholder=''/></form></div>");
+
     selectorContainer.appendChild(filter);
     shortcutFilter = document.getElementById("shortcut-filter");
   }
@@ -139,6 +141,7 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
     function modifyTableHeadings(){
       var headings = table.getElementsByTagName("th"),
           type;
+
       for (var i = 0; i < headings.length; i++) {
         type = headings[i].innerHTML.toLowerCase();
         JSHelpers.addClass(headings[i], type + "-column");
@@ -160,6 +163,7 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
       // TODO: Clean up the placeholder so it's capitalized not uppercase
       document.getElementById("shortcut-filter").setAttribute('placeholder', "Filter By " + filterType.toUpperCase());
       // TODO: Trigger a type event in the filter;
+      filterShortcuts(true);
     }
 
     function createShortcutRow(shortcut){
@@ -189,6 +193,7 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
       var commandSequence = shortcut.keys
         .map(function(sequenceString){
           return sequenceString.split("+").map(function(keyName){
+            keyName = keyboardModule.getNameFromSymbol(keyName) || keyboardModule.capitalizeIfFunctionKey(keyName) || keyName;
             return "key-" + keyName + (cases.hasOwnProperty(keyName) ? "-left" : "" );
           });
         });
@@ -247,7 +252,7 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
     }
   }
 
-  function filterShortcuts(e){
+  function filterShortcuts(override){
     // TODO: Verify this RegEx is appropriate;
     var filterPattern = new RegExp(".*" + shortcutFilter.value.toLowerCase().split("").join(".*") + ".*"),
         activeFilter,
@@ -256,8 +261,7 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
         td,
         arr;
 
-    if( document.activeElement === shortcutFilter){
-      console.log("triggering on click");
+    if( document.activeElement === shortcutFilter || override){
       activeFilter = document.querySelectorAll("th.active")[0];
       // TODO: Statement below isn't supported below IE9;
       j = Array.prototype.indexOf.call(activeFilter.parentNode.children, activeFilter);
@@ -282,8 +286,6 @@ var htmlKeyboardModule = (function(JSHelpers, shortcutData, keyboardModule){
       createShortcutLists();
 
       JSHelpers.addEventListener(window, "keyup", filterShortcuts);
-
-
       // TODO: Let user select default table and filter context to display rather than the first one
       JSHelpers.simulateMouseEvent(document.querySelectorAll("#selector-container .selector")[0], "click");
       JSHelpers.simulateMouseEvent(document.querySelectorAll(".command-column")[0], "click");
