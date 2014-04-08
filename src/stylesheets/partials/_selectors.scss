@@ -32,10 +32,15 @@
     opacity: 1;
     background-color: $yellow;
     margin: 0;
-    width: 30%;
     cursor: default;
     position: absolute;
     bottom: 0;
     right: 0;
+    width: 30%;
+
+    input{
+      overflow: hidden;
+      width: 70%;
+    }
   }
 }
