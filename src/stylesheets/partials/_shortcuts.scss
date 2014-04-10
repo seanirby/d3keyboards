@@ -10,7 +10,8 @@
   font-size: 0.75em;
   padding: 5px;
   color: $black;
-  overflow: hidden;
+  overflow: scroll;
+  max-height: 200px;
 
   > table{
     display: none
